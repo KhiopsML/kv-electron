@@ -1,0 +1,69 @@
+{
+  "asar": true,
+  "productName": "khiops visualization",
+  "appId": "com.khiops.visualization",
+  "afterSign": "./scripts/notarize.js",
+  "directories": {
+    "output": "release/"
+  },
+  "publish": [{
+		"provider": "github",
+		"owner": "KhiopsML",
+		"repo": "kv-electron"
+	}],
+  "files": [
+    "**/*",
+    "!**/*.ts",
+    "!*.map",
+    "!package.json",
+    "!package-lock.json",
+    {
+      "from": "../dist",
+      "filter": ["**/*"]
+    }
+  ],
+  "nsis": {
+    "runAfterFinish": false,
+    "perMachine": false,
+    "oneClick": false,
+    "installerLanguages": ["en_US"]
+  },
+  "win": {
+    "icon": "dist/khiops-visualization/icons/256x256.png",
+    "target": ["nsis"],
+    "fileAssociations": [
+      {
+        "ext": "khj",
+        "name": "khj File"
+      }
+    ]
+  },
+  "mac": {
+    "icon": "dist/assets/icons",
+    "entitlements": "./build/entitlements.mac.plist",
+    "entitlementsInherit": "./build/entitlements.mac.plist",
+    "gatekeeperAssess": false,
+    "hardenedRuntime": true,
+    "target": ["dmg", "zip"],
+    "fileAssociations": [
+      {
+        "ext": "khj",
+        "name": "khj File",
+        "role": "Editor"
+      }
+    ]
+  },
+  "linux": {
+    "icon": "dist/khiops-visualization/icons/",
+    "target": ["deb", "AppImage", "zip", "rpm"],
+    "category": "Utility",
+    "fileAssociations": [
+      {
+        "ext": "khj",
+        "name": "khj File",
+        "mimeType": "application/khj",
+        "role": "Editor"
+      }
+    ]
+  }
+}
