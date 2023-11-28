@@ -1,27 +1,47 @@
 # Introduction
 
+The Electron application that encapsulates Khiops Visualization
 Based on https://github.com/maximegris/angular-electron.git
 
-## Dev mode with Electron AND visualization component
+# Installation
 
-* run #yarn start into visualization-component
-* run #yarn start electron project AND DO NOT CHANGE PORT !
+```
+# yarn install
+```
 
-## Browser mode
+## Development mode with Electron AND visualization component
 
-`yarn ng:serve:web`
-Uncomment line 229 into homeLayout.component
-Also set isWebDebug = true
-and launch http://localhost:4200/#/khiops-covisualization
+First clone and install a local copy of visualization-component
+then replace:
+```
+"scripts": [
+  "node_modules/khiops-visualization/khiops-webcomponents.bundle.js"
+],
+```
+with:
+```
+"scripts": [
+  "../visualization-component/dist/khiops-webcomponent/khiops-webcomponents.bundle.js"
+],
+```
+to load local copy of visualization-component
+
+Into visualization-component, run:
+
+```
+# yarn start
+```
+
+Into electron folder, run:
+
+```
+# yarn start
+```
+
+**DO NOT CHANGE PORT WHEN PROMPED to debug directly visualization-component into Electron**
+
 
 ## Boilerplate change log
 
 https://github.com/maximegris/angular-electron/blob/master/CHANGELOG.md
 
-## certificates and github secrets
-
-* Generate Personal access tokens into USER settings with repo perms (named for instance khiops\_token)
-* To access private lib repo, khiops-covisualization and khiops-cocovisualization must have this khiops\_token into repos secrets (the secret is displayed only one time)
-* For certificates : repos must have WINDOWS\_CERTS and WINDOWS\_CERTS and WINDOWS\_CERTS\_PASSWORD repo secrets,
-with base 64 encoded certificate, (generation with : https://blog.techfabric.com/convert-pfx-certificate-to-base64-string/) and certificate password
-* MAC notarizing : https://kilianvalkhof.com/2019/electron/notarizing-your-electron-application/
