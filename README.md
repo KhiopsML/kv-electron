@@ -1,5 +1,8 @@
 ![Build Releases](https://github.com/KhiopsML/kv-electron/actions/workflows/release.yml/badge.svg) ![test workflow](https://github.com/KhiopsML/khiops-visualization/actions/workflows/test.yml/badge.svg) [![Latest Stable Version](https://img.shields.io/github/v/release/KhiopsML/kv-electron?label=Latest%20stable%20version)](https://github.com/KhiopsML/kv-electron/releases) 
 
+<table><tr><th>Result</th><th>Passed :white_check_mark:</th><th>Failed :x:</th><th>Pending :hand:</th><th>Skipped :leftwards_arrow_with_hook:</th><th>Duration :clock8:</th></tr><tr><td>Passing :white_check_mark:</td><td>80</td><td>0</td><td>0</td><td>0</td><td>394.137s</td></tr></table>
+<a href="">
+
 # Introduction
 
 The Electron application that encapsulates Khiops Visualization
