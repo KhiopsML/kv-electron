@@ -29,7 +29,7 @@ jobs:
           node-version: 18
 
       - name: Build/release Electron Win
-        uses: samuelmeuli/action-electron-builder@v1
+        uses: samuelmeuli/action-electron-builder@v1.6.0
         with:
           build_script_name: "build:prod"
           # GitHub token, automatically provided to the action
