@@ -1,7 +1,7 @@
 {
   "name": "khiops-visualization",
   "title": "khiops Visualization",
-  "version": "11.0.4",
+  "version": "11.0.3",
   "description": "khiops Visualization",
   "license": "UNLICENSED",
   "repository": "https://github.com/KhiopsML/kv-electron",
