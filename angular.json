@@ -171,7 +171,6 @@
       }
     }
   },
-  "defaultProject": "angular-electron",
   "schematics": {
     "@angular-eslint/schematics:application": {
       "setParserOptionsProject": true
