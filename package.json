@@ -3,7 +3,6 @@
   "title": "khiops Visualization",
   "main": "app/main.js",
   "version": "11.0.3",
-  "private": true,
   "browser": {
     "child_process": false,
     "electron": false,
