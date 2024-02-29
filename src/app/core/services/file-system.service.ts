@@ -46,7 +46,7 @@ export class FileSystemService {
   }
 
   openFileDialog(callbackDone) {
-    // this.khiopsLibraryService.trackEvent('click', 'open_file');
+    // this.trackerService.trackEvent('click', 'open_file');
 
     const associationFiles = ['json'];
     associationFiles.push('khj');

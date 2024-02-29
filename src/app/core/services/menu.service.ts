@@ -39,7 +39,7 @@ export class MenuService {
         {
           label: this.translate.instant('GLOBAL_MENU_OPEN'),
           click: () => {
-            // this.khiopsLibraryService.trackEvent('click', 'open_file');
+            // this.trackerService.trackEvent('click', 'open_file');
             this.openFileDialog(refreshCb);
           },
         },
@@ -52,7 +52,7 @@ export class MenuService {
         {
           label: this.translate.instant('GLOBAL_MENU_CLOSE_FILE'),
           click: () => {
-            // this.khiopsLibraryService.trackEvent('click', 'close_file');
+            // this.trackerService.trackEvent('click', 'close_file');
             this.closeFile();
           },
         },
@@ -77,7 +77,7 @@ export class MenuService {
         {
           label: this.translate.instant('GLOBAL_MENU_RESTART_APP'),
           click: () => {
-            // this.khiopsLibraryService.trackEvent('click', 'restart_app');
+            // this.trackerService.trackEvent('click', 'restart_app');
             this.electronService.remote.app.relaunch();
             this.electronService.remote.app.exit(0);
           },
@@ -85,7 +85,7 @@ export class MenuService {
         {
           label: this.translate.instant('GLOBAL_MENU_EXIT'),
           click: () => {
-            // this.khiopsLibraryService.trackEvent('click', 'exit_app');
+            // this.trackerService.trackEvent('click', 'exit_app');
             this.electronService.remote.app.quit();
           },
         },
@@ -100,7 +100,7 @@ export class MenuService {
           menu1.submenu.splice(2, 0, {
             label: this.fileSystemService.getFileHistory().files[i],
             click: () => {
-              // this.khiopsLibraryService.trackEvent('click', 'open_file');
+              // this.trackerService.trackEvent('click', 'open_file');
               this.openFile(
                 this.fileSystemService.getFileHistory().files[i],
                 refreshCb
@@ -117,7 +117,7 @@ export class MenuService {
         {
           role: 'toggleDevTools',
           click: () => {
-            // this.khiopsLibraryService.trackEvent('page_view', 'debugger');
+            // this.trackerService.trackEvent('page_view', 'debugger');
           },
         },
         {
@@ -141,7 +141,7 @@ export class MenuService {
         {
           label: this.translate.instant('GLOBAL_MENU_RELEASE_NOTES'),
           click: () => {
-            // this.khiopsLibraryService.trackEvent('page_view', 'release_notes');
+            // this.trackerService.trackEvent('page_view', 'release_notes');
             this.configService.openReleaseNotesDialog();
           },
         },
@@ -153,7 +153,7 @@ export class MenuService {
               type: 'radio',
               click: () => {
                 if (this.currentChannel !== 'latest') {
-                  // this.khiopsLibraryService.trackEvent('click', 'release', 'latest');
+                  // this.trackerService.trackEvent('click', 'release', 'latest');
                   this.setChannel('latest');
                 }
               },
@@ -174,7 +174,7 @@ export class MenuService {
                       refreshCb();
                     }
                   });
-                  // this.khiopsLibraryService.trackEvent('click', 'release', 'beta');
+                  // this.trackerService.trackEvent('click', 'release', 'beta');
                   // this.dialogRef.closeAll();
                   // this.ngzone.run(() => {
                   //   const config = new MatDialogConfig();
@@ -215,7 +215,7 @@ export class MenuService {
         {
           role: 'togglefullscreen',
           click: () => {
-            // this.khiopsLibraryService.trackEvent('click', 'full_screen');
+            // this.trackerService.trackEvent('click', 'full_screen');
           },
         },
         {
@@ -225,21 +225,21 @@ export class MenuService {
           role: 'resetZoom',
           accelerator: 'CommandOrControl+nummult',
           click: () => {
-            // this.khiopsLibraryService.trackEvent('click', 'zoom', 'reset');
+            // this.trackerService.trackEvent('click', 'zoom', 'reset');
           },
         },
         {
           role: 'zoomIn',
           accelerator: 'CommandOrControl+numadd',
           click: () => {
-            // this.khiopsLibraryService.trackEvent('click', 'zoom', 'in');
+            // this.trackerService.trackEvent('click', 'zoom', 'in');
           },
         },
         {
           role: 'zoomOut',
           accelerator: 'CommandOrControl+numsub',
           click: () => {
-            // this.khiopsLibraryService.trackEvent('click', 'zoom', 'out');
+            // this.trackerService.trackEvent('click', 'zoom', 'out');
           },
         },
       ],
@@ -249,7 +249,7 @@ export class MenuService {
       label: this.translate.instant('GLOBAL_MENU_REPORT_A_BUG'),
 
       click: () => {
-        // this.khiopsLibraryService.trackEvent('page_view', 'report_issue');
+        // this.trackerService.trackEvent('page_view', 'report_issue');
         const emailId = 'bug.khiopsvisualization@orange.com';
         const subject =
           LibVersionService.getAppTitle() +
@@ -287,7 +287,7 @@ export class MenuService {
       const menu5 = {
         label: btnUpdateText,
         click: () => {
-          // this.khiopsLibraryService.trackEvent('click', 'update_version');
+          // this.trackerService.trackEvent('click', 'update_version');
           if (btnUpdate === 'update-available' && !this.updateInProgress) {
             updateCb();
           }

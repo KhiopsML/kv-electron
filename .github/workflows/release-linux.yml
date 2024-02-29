@@ -28,6 +28,9 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 18
+      - run: yarn setEnv
+        env:
+          TRACKER_ID: ${{ secrets.TRACKER_ID }}
 
       - name: Build/release Electron Linux
         uses: samuelmeuli/action-electron-builder@v1.6.0

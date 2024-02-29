@@ -13,6 +13,7 @@ import { ElectronService } from './core/services/electron.service';
 import { ConfigService } from './core/services/config.service';
 import { MenuService } from './core/services/menu.service';
 import { FileSystemService } from './core/services/file-system.service';
+import { APP_CONFIG } from '../environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -53,10 +54,14 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   setAppConfig() {
     this.config = this.visualizationComponent.nativeElement;
 
+    // @ts-ignore
+    const trackerId = APP_CONFIG.TRACKER_ID || ''; // added during CI
+
     //@ts-ignore
     this.config.setConfig({
       appSource: 'ELECTRON',
       showProjectTab: true,
+      trackerId: trackerId,
       onFileOpen: () => {
         console.log('fileOpen');
         this.menuService.openFileDialog(() => {
