@@ -192,6 +192,10 @@ ipcMain.handle('set-dark-mode', () => {
   nativeTheme.themeSource = 'dark';
 });
 
+ipcMain.handle('set-orange-mode', () => {
+  nativeTheme.themeSource = 'dark';
+});
+
 ipcMain.handle('set-light-mode', () => {
   nativeTheme.themeSource = 'light';
 });
