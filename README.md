@@ -5,7 +5,8 @@
 
 # Introduction
 
-The Electron application that encapsulates Khiops Visualization
+The Electron application that encapsulates Khiops Visualization from https://github.com/KhiopsML/khiops-visualization
+
 Based on https://github.com/maximegris/angular-electron.git
 
 # Installation
