@@ -17,6 +17,8 @@ import {
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 import { AppComponent } from './app.component';
+import { BigFileLoadingComponent } from './big-file-loading/big-file-loading.component';
+import { CommonModule } from '@angular/common';
 
 // AoT requires an exported function for factories
 const httpLoaderFactory = (http: HttpClient): TranslateHttpLoader =>
@@ -28,8 +30,9 @@ export function setupTranslateFactory(service: TranslateService) {
 }
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, BigFileLoadingComponent],
   imports: [
+    CommonModule,
     BrowserModule,
     FormsModule,
     HttpClientModule,

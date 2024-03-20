@@ -2,6 +2,7 @@ import { Injectable, NgZone } from '@angular/core';
 import { ElectronService } from './electron.service';
 import { TranslateService } from '@ngx-translate/core';
 import { ConfigService } from './config.service';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 let es: any;
 try {
@@ -26,6 +27,9 @@ export class FileSystemService {
     isBigJsonFile: boolean;
     loadingInfo: string;
   };
+
+  private _fileLoaderSub: BehaviorSubject<any> = new BehaviorSubject(undefined);
+  public fileLoader$: Observable<any> = this._fileLoaderSub.asObservable();
 
   constructor(
     private ngzone: NgZone,
@@ -129,6 +133,8 @@ export class FileSystemService {
                 ) {
                   this.fileLoaderDatas.isBigJsonFile = true;
                   this.fileLoaderDatas.loadingInfo = '';
+                  this._fileLoaderSub.next(this.fileLoaderDatas);
+
                   const currentDatas = {};
                   const stream = this.electronService.fs.createReadStream(
                     filename,
@@ -147,6 +153,7 @@ export class FileSystemService {
                     es.map((pipeDatas) => {
                       this.fileLoaderDatas.loadingInfo = pipeDatas.key;
                       currentDatas[pipeDatas.key] = pipeDatas.value;
+                      this._fileLoaderSub.next(this.fileLoaderDatas);
                     })
                   );
 
@@ -154,6 +161,9 @@ export class FileSystemService {
                     .on('end', () => {
                       this.fileLoaderDatas.datas = currentDatas;
                       this.fileLoaderDatas.datas.filename = filename;
+                      this.fileLoaderDatas.isLoadingDatas = false;
+                      this._fileLoaderSub.next(this.fileLoaderDatas);
+
                       resolve(this.fileLoaderDatas.datas);
                     })
                     .on('error', () => {
@@ -161,12 +171,16 @@ export class FileSystemService {
                     });
                 } else {
                   this.fileLoaderDatas.isLoadingDatas = false;
+                  this._fileLoaderSub.next(this.fileLoaderDatas);
+
                   reject(errReadFile);
                 }
               } else {
                 this.fileLoaderDatas.isLoadingDatas = false;
                 this.fileLoaderDatas.datas = JSON.parse(datas);
                 this.fileLoaderDatas.datas.filename = filename;
+                this._fileLoaderSub.next(this.fileLoaderDatas);
+
                 resolve(this.fileLoaderDatas.datas);
               }
             }

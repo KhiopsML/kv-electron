@@ -1,0 +1,30 @@
+<div id="big-file-loading" *ngIf="visible">
+  Loading very large reports may take more than a minute...
+  <br />
+  <svg
+    width="20"
+    height="20"
+    viewBox="0 0 20 20"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <circle cx="10" cy="10" r="8" fill="none" stroke="#000" stroke-width="2" />
+    <circle
+      cx="10"
+      cy="10"
+      r="8"
+      fill="none"
+      stroke="#007bff"
+      stroke-width="3"
+      stroke-dasharray="50.2655"
+      stroke-dashoffset="50.2655"
+    >
+      <animate
+        attributeName="stroke-dashoffset"
+        begin="0s"
+        dur="1s"
+        values="50.2655;0"
+        repeatCount="indefinite"
+      />
+    </circle>
+  </svg>
+</div>
