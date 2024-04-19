@@ -7,7 +7,7 @@
   "repository": "https://github.com/KhiopsML/kv-electron",
   "author": {
     "name": "Orange",
-    "email": "khiops@orange.com"
+    "email": "khiops.team@orange.com"
   },
   "main": "main.js",
   "dependencies": {
