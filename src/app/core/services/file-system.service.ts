@@ -60,7 +60,7 @@ export class FileSystemService {
         properties: ['openFile'],
         filters: [
           {
-            name: this.translate.get('GLOBAL.FILES'),
+            name: this.translate.instant('GLOBAL.FILES'),
             extensions: associationFiles,
           },
         ],
@@ -106,7 +106,7 @@ export class FileSystemService {
           }
         })
         .catch((error) => {
-          console.warn(this.translate.get('SNACKS.OPEN_FILE_ERROR'), error);
+          console.warn(this.translate.instant('SNACKS.OPEN_FILE_ERROR'), error);
           this.fileLoaderDatas.isLoadingDatas = false;
         });
     }
