@@ -2,8 +2,12 @@
   "name": "khiops-visualization",
   "title": "khiops Visualization",
   "main": "app/main.js",
-  "license": "BSD-3-Clause-Clear",
   "version": "11.0.5",
+  "license": "BSD-3-Clause-Clear",
+  "author": {
+    "name": "Orange",
+    "email": "khiops.team@orange.com"
+  },
   "browser": {
     "child_process": false,
     "electron": false,
