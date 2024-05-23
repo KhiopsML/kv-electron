@@ -174,32 +174,6 @@ export class MenuService {
                       refreshCb();
                     }
                   });
-                  // this.trackerService.trackEvent('click', 'release', 'beta');
-                  // this.dialogRef.closeAll();
-                  // this.ngzone.run(() => {
-                  //   const config = new MatDialogConfig();
-                  //   const dialogRef: MatDialogRef<ConfirmDialogComponent> =
-                  //     this.dialog.open(ConfirmDialogComponent, config);
-                  //   dialogRef.componentInstance.title = this.translate.instant(
-                  //     'GLOBAL.ENABLE_BETA_VERSIONS'
-                  //   );
-                  //   dialogRef.componentInstance.message = this.translate.instant(
-                  //     'GLOBAL.BETA_VERSIONS_WARNING'
-                  //   );
-                  //   dialogRef
-                  //     .afterClosed()
-                  //     .toPromise()
-                  //     .then((e) => {
-                  //       if (e === 'confirm') {
-                  //         // User confirm
-                  //         this.setChannel('beta');
-                  //       } else if (e === 'cancel') {
-                  //         this.setChannel('latest');
-                  //         // re construct the menu to set channel to latest
-                  //         this.constructMenu();
-                  //       }
-                  //     });
-                  // });
                 }
               },
               checked: this.currentChannel === 'beta',
