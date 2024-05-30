@@ -60,7 +60,6 @@ export class FileSystemService {
         properties: ['openFile'],
         filters: [
           {
-            name: this.translate.instant('GLOBAL.FILES'),
             extensions: associationFiles,
           },
         ],
