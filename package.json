@@ -8,6 +8,15 @@
     "name": "Orange",
     "email": "khiops.team@orange.com"
   },
+  "description": "The Electron application that encapsulates Khiops Visualization",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/KhiopsML/kv-electron.git"
+  },
+  "bugs": {
+    "url": "https://github.com/KhiopsML/kv-electron/issues"
+  },
+  "homepage": "https://github.com/KhiopsML/kv-electron#readme",
   "browser": {
     "child_process": false,
     "electron": false,
