@@ -281,7 +281,6 @@ export class MenuService {
   }
 
   openFile(filename, callbackDone) {
-    // this.dialogRef.closeAll();
     this.fileSystemService.openFile(filename, () => {
       callbackDone();
     });
@@ -307,12 +306,10 @@ export class MenuService {
   }
 
   save() {
-    // this.dialogRef.closeAll();
     // this.fileSaverService.save(this.appName, this.saveService.constructDatasToSave());
   }
 
   saveAs() {
-    // this.dialogRef.closeAll();
     // this.fileSaverService.saveAs(this.saveService.constructDatasToSave());
   }
 }
