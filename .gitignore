@@ -12,6 +12,7 @@ debug.log
 /.cache
 /.private_keys
 .angular
+.vscode
 
 # dependencies
 /node_modules
