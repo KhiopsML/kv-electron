@@ -18,10 +18,6 @@ export class ConfigService {
     this.config.setDatas(datas);
   }
 
-  openReleaseNotesDialog() {
-    this.config.openReleaseNotesDialog();
-  }
-
   openChannelDialog(cb) {
     this.config.openChannelDialog(cb);
   }
