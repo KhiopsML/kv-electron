@@ -46,7 +46,16 @@
     "entitlementsInherit": "./build/entitlements.mac.plist",
     "gatekeeperAssess": false,
     "hardenedRuntime": true,
-    "target": ["dmg", "zip"],
+    "target": [
+      {
+        "target": "dmg",
+        "arch": ["x64", "arm64"]
+      },
+      {
+        "target": "zip",
+        "arch": ["x64", "arm64"]
+      }
+    ],
     "fileAssociations": [
       {
         "ext": "khj",

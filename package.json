@@ -2,7 +2,7 @@
   "name": "khiops-visualization",
   "title": "khiops Visualization",
   "main": "app/main.js",
-  "version": "11.0.6",
+  "version": "11.0.7",
   "license": "BSD-3-Clause-Clear",
   "author": {
     "name": "Orange",
@@ -102,6 +102,7 @@
     "@typescript-eslint/eslint-plugin": "6.21.0",
     "@typescript-eslint/parser": "6.21.0",
     "conventional-changelog-cli": "4.1.0",
+    "@electron/notarize": "2.3.2",
     "electron": "30.0.8",
     "electron-builder": "24.13.3",
     "electron-builder-notarize": "1.5.2",

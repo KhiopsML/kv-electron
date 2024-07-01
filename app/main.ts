@@ -42,11 +42,19 @@ app.on('will-finish-launching', function () {
 
     if (fileToLoad) {
       log.info('fileToLoad');
-      setTimeout(function () {
-        if (win && win.webContents && fileToLoad) {
+
+      if (win) {
+        setTimeout(() => {
           win.webContents.send('file-open-system', fileToLoad);
-        }
-      }, 2000);
+        }, 2500);
+      } else {
+        // if win is not ready, wait for it
+        app.once('browser-window-created', () => {
+          setTimeout(() => {
+            win.webContents.send('file-open-system', fileToLoad);
+          }, 2500);
+        });
+      }
     }
   });
 });
