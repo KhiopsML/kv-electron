@@ -46,7 +46,14 @@ app.on('will-finish-launching', function () {
       if (win) {
         setTimeout(() => {
           win.webContents.send('file-open-system', fileToLoad);
-        }, 500);
+        }, 2500);
+      } else {
+        // if win is not ready, wait for it
+        app.once('browser-window-created', () => {
+          setTimeout(() => {
+            win.webContents.send('file-open-system', fileToLoad);
+          }, 2500);
+        });
       }
     }
   });
@@ -98,13 +105,6 @@ function createWindow(): BrowserWindow {
     const url = new URL(path.join('file:', __dirname, pathIndex));
 
     win.loadURL(url.href);
-  }
-
-  // Traiter le fichier ouvert après que la fenêtre soit prête
-  if (fileToLoad) {
-    win.webContents.on('did-finish-load', () => {
-      win.webContents.send('open-file', fileToLoad);
-    });
   }
 
   // Emitted when the window is closed.
