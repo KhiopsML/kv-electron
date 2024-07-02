@@ -1,29 +1,44 @@
 <div id="big-file-loading" *ngIf="visible">
-  Loading very large reports may take more than a minute...
-  <br />
+  <span *ngIf="isTextVisible"
+    >Loading very large reports may take more than a minute...
+  </span>
   <svg
-    width="20"
-    height="20"
-    viewBox="0 0 20 20"
+    style="width: 100px"
+    version="1.1"
+    id="L4"
     xmlns="http://www.w3.org/2000/svg"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    x="0px"
+    y="0px"
+    viewBox="0 0 100 100"
+    enable-background="new 0 0 0 0"
+    xml:space="preserve"
   >
-    <circle cx="10" cy="10" r="8" fill="none" stroke="#000" stroke-width="2" />
-    <circle
-      cx="10"
-      cy="10"
-      r="8"
-      fill="none"
-      stroke="#007bff"
-      stroke-width="3"
-      stroke-dasharray="50.2655"
-      stroke-dashoffset="50.2655"
-    >
+    <circle fill="#999" stroke="none" cx="6" cy="50" r="6">
       <animate
-        attributeName="stroke-dashoffset"
-        begin="0s"
+        attributeName="opacity"
         dur="1s"
-        values="50.2655;0"
+        values="0;1;0"
         repeatCount="indefinite"
+        begin="0.1"
+      />
+    </circle>
+    <circle fill="#999" stroke="none" cx="26" cy="50" r="6">
+      <animate
+        attributeName="opacity"
+        dur="1s"
+        values="0;1;0"
+        repeatCount="indefinite"
+        begin="0.2"
+      />
+    </circle>
+    <circle fill="#999" stroke="none" cx="46" cy="50" r="6">
+      <animate
+        attributeName="opacity"
+        dur="1s"
+        values="0;1;0"
+        repeatCount="indefinite"
+        begin="0.3"
       />
     </circle>
   </svg>

@@ -114,6 +114,7 @@ export class FileSystemService {
     this.fileLoaderDatas.datas = undefined;
     this.fileLoaderDatas.isLoadingDatas = true;
     this.fileLoaderDatas.isBigJsonFile = false;
+    this._fileLoaderSub.next(this.fileLoaderDatas);
 
     return new Promise((resolve, reject) => {
       this.electronService.fs.stat(filename, (err, stats) => {
@@ -179,7 +180,6 @@ export class FileSystemService {
                 this.fileLoaderDatas.datas = JSON.parse(datas);
                 this.fileLoaderDatas.datas.filename = filename;
                 this._fileLoaderSub.next(this.fileLoaderDatas);
-
                 resolve(this.fileLoaderDatas.datas);
               }
             }
