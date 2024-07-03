@@ -37,5 +37,6 @@
   "GLOBAL_UPDATE_DOWNLOAD_COMPLETE": "The installation will start",
   "GLOBAL_UPDATE_UPDATE_AVAILABLE": "Update available",
   "GLOBAL_UPDATE_UPDATE_ERROR": "Update error",
-  "GLOBAL_UPDATE_WAITING_FOR_DOWNLOAD": "Waiting For download"
+  "GLOBAL_UPDATE_WAITING_FOR_DOWNLOAD": "Waiting For download",
+  "OPEN_FILE_ERROR": "No data or file error !"
 }
