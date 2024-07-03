@@ -80,7 +80,7 @@
     "electron-log": "3.0.9",
     "electron-updater": "6.2.1",
     "event-stream": "4.0.1",
-    "khiops-visualization": "11.4.2",
+    "khiops-visualization": "11.4.3",
     "rxjs": "7.8.1",
     "toastify-js": "1.12.0",
     "tslib": "2.6.2",
