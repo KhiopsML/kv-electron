@@ -45,13 +45,13 @@ app.on('will-finish-launching', function () {
 
       if (win) {
         setTimeout(() => {
-          win.webContents.send('file-open-system', fileToLoad);
+          win?.webContents?.send('file-open-system', fileToLoad);
         }, 2500);
       } else {
         // if win is not ready, wait for it
         app.once('browser-window-created', () => {
           setTimeout(() => {
-            win.webContents.send('file-open-system', fileToLoad);
+            win?.webContents?.send('file-open-system', fileToLoad);
           }, 2500);
         });
       }
@@ -176,8 +176,8 @@ ipcMain.handle('launch-check-for-update', async (event, arg) => {
 });
 
 function checkForUpdates() {
-  win.webContents
-    .executeJavaScript(
+  win?.webContents
+    ?.executeJavaScript(
       'localStorage.getItem("KHIOPS_VISUALIZATION_CHANNEL");',
       true
     )
@@ -193,7 +193,7 @@ function checkForUpdates() {
 }
 
 ipcMain.handle('set-title-bar-name', async (event, arg) => {
-  win.setTitle(arg && arg.title);
+  win.setTitle(arg?.title);
 });
 
 ipcMain.handle('set-dark-mode', () => {
@@ -227,26 +227,20 @@ autoUpdater.on('update-available', (info) => {
   //   }
   // });
   setTimeout(function () {
-    if (win && win.webContents) {
-      win.webContents.send('update-available', info);
-    }
+    win?.webContents?.send('update-available', info);
   }, 2000);
 });
 
 autoUpdater.on('update-not-available', (info) => {
   log.info('update-not-available', info);
   setTimeout(function () {
-    if (win && win.webContents) {
-      win.webContents.send('update-not-available', info);
-    }
+    win?.webContents?.send('update-not-available', info);
   }, 2000);
 });
 
 autoUpdater.on('download-progress', (progressObj) => {
   log.info('download-progress', progressObj);
-  if (win && win.webContents) {
-    win.webContents.send('download-progress-info', progressObj);
-  }
+  win?.webContents?.send('download-progress-info', progressObj);
 });
 
 autoUpdater.on('update-downloaded', (event, releaseNotes, releaseName) => {
@@ -274,8 +268,6 @@ autoUpdater.on('error', (message) => {
   log.info('error', message);
 
   setTimeout(function () {
-    if (win && win.webContents) {
-      win.webContents.send('update-error', message);
-    }
+    win?.webContents?.send('update-error', message);
   }, 2000);
 });
