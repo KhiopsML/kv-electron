@@ -57,3 +57,8 @@ jobs:
           # macOS notarization API key
           API_KEY_ID: ${{ secrets.api_key_id }}
           API_KEY_ISSUER_ID: ${{ secrets.api_key_issuer_id }}
+      - name: Check for notarization failure
+        if: failure()
+        run: |
+          echo "Error: samuelmeuli/action-electron-builder - see action logs"
+          exit 1
