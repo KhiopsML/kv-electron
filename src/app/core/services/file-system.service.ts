@@ -107,7 +107,14 @@ export class FileSystemService {
         })
         .catch((error) => {
           console.warn(this.translate.instant('OPEN_FILE_ERROR'), error);
-          this.fileLoaderDatas.isLoadingDatas = false;
+          this.closeFile();
+          Toastify({
+            text: this.translate.instant('OPEN_FILE_ERROR'),
+            gravity: 'bottom',
+            position: 'center',
+            duration: 3000,
+          }).showToast();
+          this._fileLoaderSub.next(this.fileLoaderDatas);
         });
     }
   }
@@ -191,6 +198,7 @@ export class FileSystemService {
                     duration: 3000,
                   }).showToast();
                   this._fileLoaderSub.next(this.fileLoaderDatas);
+                  this.closeFile();
                   reject();
                 }
               }
@@ -204,7 +212,7 @@ export class FileSystemService {
   closeFile() {
     this.initialize();
     this.ngzone.run(() => {
-      this.configService.setDatas(undefined);
+      this.configService.setDatas();
     });
   }
 
