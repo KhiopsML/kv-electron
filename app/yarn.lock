@@ -12,10 +12,10 @@ argparse@^2.0.1:
   resolved "https://registry.yarnpkg.com/argparse/-/argparse-2.0.1.tgz#246f50f3ca78a3240f6c997e8a9bd1eac49e4b38"
   integrity sha512-8+9WqebbFzpX9OR+Wa6O29asIogeRMzcGtAINdpMHHyAg10f05aSFVBbcEqGf/PXw1EjAZ+q2/bEBg3DvurK3Q==
 
-builder-util-runtime@9.2.3:
-  version "9.2.3"
-  resolved "https://registry.yarnpkg.com/builder-util-runtime/-/builder-util-runtime-9.2.3.tgz#0a82c7aca8eadef46d67b353c638f052c206b83c"
-  integrity sha512-FGhkqXdFFZ5dNC4C+yuQB9ak311rpGAw+/ASz8ZdxwODCv1GGMWgLDeofRkdi0F3VCHQEWy/aXcJQozx2nOPiw==
+builder-util-runtime@9.2.5:
+  version "9.2.5"
+  resolved "https://registry.yarnpkg.com/builder-util-runtime/-/builder-util-runtime-9.2.5.tgz#0afdffa0adb5c84c14926c7dd2cf3c6e96e9be83"
+  integrity sha512-HjIDfhvqx/8B3TDN4GbABQcgpewTU4LMRTQPkVpKYV3lsuxEJoIfvg09GyWTNmfVNSUAYf+fbTN//JX4TH20pg==
   dependencies:
     debug "^4.3.4"
     sax "^1.2.4"
@@ -32,12 +32,12 @@ electron-log@3.0.8:
   resolved "https://registry.yarnpkg.com/electron-log/-/electron-log-3.0.8.tgz#ea672dc40b560143ed5d887eff1ff1904fe9ef71"
   integrity sha512-B9+eJ8z3UbDnWEz+G33SIJvEDeKLznHEV4sCu6bR31KuOdp3dYN046QBWbLNsvKU+lzFI6eOi+xNCpNHZvatiw==
 
-electron-updater@6.1.7:
-  version "6.1.7"
-  resolved "https://registry.yarnpkg.com/electron-updater/-/electron-updater-6.1.7.tgz#7ebd5fb0dde6372309bdfa8031e8eac3817f9955"
-  integrity sha512-SNOhYizjkm4ET+Y8ilJyUzcVsFJDtINzVN1TyHnZeMidZEG3YoBebMyXc/J6WSiXdUaOjC7ngekN6rNp6ardHA==
+electron-updater@6.3.0:
+  version "6.3.0"
+  resolved "https://registry.yarnpkg.com/electron-updater/-/electron-updater-6.3.0.tgz#13a5c3c3f0b2b114fe33181e24a8270096734b3e"
+  integrity sha512-3Xlezhk+dKaSQrOnkQNqCGiuGSSUPO9BV9TQZ4Iig6AyTJ4FzJONE5gFFc382sY53Sh9dwJfzKsA3DxRHt2btw==
   dependencies:
-    builder-util-runtime "9.2.3"
+    builder-util-runtime "9.2.5"
     fs-extra "^10.1.0"
     js-yaml "^4.1.0"
     lazy-val "^1.0.5"
