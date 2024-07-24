@@ -32,10 +32,10 @@ electron-log@3.0.8:
   resolved "https://registry.yarnpkg.com/electron-log/-/electron-log-3.0.8.tgz#ea672dc40b560143ed5d887eff1ff1904fe9ef71"
   integrity sha512-B9+eJ8z3UbDnWEz+G33SIJvEDeKLznHEV4sCu6bR31KuOdp3dYN046QBWbLNsvKU+lzFI6eOi+xNCpNHZvatiw==
 
-electron-updater@6.3.0:
-  version "6.3.0"
-  resolved "https://registry.yarnpkg.com/electron-updater/-/electron-updater-6.3.0.tgz#13a5c3c3f0b2b114fe33181e24a8270096734b3e"
-  integrity sha512-3Xlezhk+dKaSQrOnkQNqCGiuGSSUPO9BV9TQZ4Iig6AyTJ4FzJONE5gFFc382sY53Sh9dwJfzKsA3DxRHt2btw==
+electron-updater@6.3.1:
+  version "6.3.1"
+  resolved "https://registry.yarnpkg.com/electron-updater/-/electron-updater-6.3.1.tgz#f233dfa2a3d8bf5b91c9224749faefcff01a9500"
+  integrity sha512-Et9t9LcH42q/A73yu398YGHR7cbdTnHbIyFN/p0FNZIJi10XxGshZBVVE6FsClMuoggw7FVhn1+kMUVMCqS7MA==
   dependencies:
     builder-util-runtime "9.2.5"
     fs-extra "^10.1.0"
