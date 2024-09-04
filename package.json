@@ -128,6 +128,7 @@
     "wait-on": "7.2.0"
   },
   "resolutions": {
+    "webpack": "^5.94.0",
     "micromatch": "4.0.8",
     "axios": "1.7.4",
     "yargs": "^17.7.2",
