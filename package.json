@@ -129,6 +129,7 @@
   },
   "resolutions": {
     "webpack": "^5.94.0",
+    "elliptic": "6.5.7",
     "micromatch": "4.0.8",
     "axios": "1.7.4",
     "yargs": "^17.7.2",
