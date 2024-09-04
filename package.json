@@ -129,6 +129,7 @@
   },
   "resolutions": {
     "micromatch": "4.0.8",
+    "axios": "1.7.4",
     "yargs": "^17.7.2",
     "tough-cookie": "^4.1.3",
     "tar": "^6.2.1",
