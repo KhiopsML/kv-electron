@@ -50,7 +50,6 @@
     "electron:serve": "wait-on tcp:4200 && npm run electron:serve-tsc && electron . --serve",
     "electron:local": "npm run build:prod && electron .",
     "electron:build": "npm run build:prod && electron-builder build --publish=never",
-    "version": "11.0.9",
     "publishReleases": "npm run build-visu && cd ../khiops-visualization-electron && npm run build:prod && electron-builder build --windows --ia32 -p always && electron-builder build --linux -p always && electron-builder build --mac -p always",
     "removeDist": "rimraf dist && rimraf release && rimraf .cache",
     "removeMocks": "rimraf dist/khiops-visualization/mocks",
@@ -62,7 +61,7 @@
     "electron:publish": "npm run build:prod && electron-builder build --publish=never",
     "electron:mac": "npm run build:prod && electron-builder build --mac -p always",
     "lint": "ng lint",
-    "updateElectron": "npx cross-env ELECTRON_GET_USE_PROXY=true GLOBAL_AGENT_HTTPS_PROXY=http://proxypac.si.francetelecom.fr:8080/ npm install -D electron@latest --force --legacy-peer-deps",
+    "updateElectron": "npx cross-env ELECTRON_GET_USE_PROXY=true GLOBAL_AGENT_HTTPS_PROXY=http://proxypac.si.francetelecom.fr:8080/ yarn add electron@latest --force --legacy-peer-deps",
     "updateVersions": "ncu -u --target minor"
   },
   "dependencies": {
@@ -105,8 +104,8 @@
     "@typescript-eslint/eslint-plugin": "6.21.0",
     "@typescript-eslint/parser": "6.21.0",
     "conventional-changelog-cli": "4.1.0",
-    "electron": "32.1.2",
-    "electron-builder": "24.13.3",
+    "electron": "33.0.1",
+    "electron-builder": "25.1.8",
     "electron-builder-notarize": "1.5.2",
     "electron-debug": "3.2.0",
     "electron-reloader": "1.2.3",
