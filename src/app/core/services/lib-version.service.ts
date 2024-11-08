@@ -10,7 +10,6 @@ try {
   providedIn: 'root',
 })
 export class LibVersionService {
-  constructor() {}
 
   static getAppVersion() {
     return (pjson && pjson.version) || undefined;
