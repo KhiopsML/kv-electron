@@ -18,7 +18,7 @@ export class ConfigService {
     this.config.setDatas(datas);
   }
 
-  openChannelDialog(cb) {
+  openChannelDialog(cb: Function) {
     this.config.openChannelDialog(cb);
   }
 }

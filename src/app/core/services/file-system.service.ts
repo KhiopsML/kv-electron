@@ -3,6 +3,7 @@ import { ElectronService } from './electron.service';
 import { TranslateService } from '@ngx-translate/core';
 import { ConfigService } from './config.service';
 import { BehaviorSubject, Observable } from 'rxjs';
+// @ts-ignore
 import Toastify from 'toastify-js';
 
 let es: any;
@@ -22,7 +23,7 @@ try {
   providedIn: 'root',
 })
 export class FileSystemService {
-  fileLoaderDatas: {
+  fileLoaderDatas?: {
     isLoadingDatas: any;
     datas: any;
     isBigJsonFile: boolean;
@@ -50,7 +51,7 @@ export class FileSystemService {
     };
   }
 
-  openFileDialog(callbackDone) {
+  openFileDialog(callbackDone: Function) {
     // this.trackerService.trackEvent('click', 'open_file');
 
     const associationFiles = ['json'];
@@ -65,23 +66,23 @@ export class FileSystemService {
           },
         ],
       })
-      .then((result) => {
+      .then((result: Electron.OpenDialogReturnValue) => {
         if (result && !result.canceled && result.filePaths) {
           this.openFile(result.filePaths[0], callbackDone);
           return;
         }
       })
-      .catch((err) => {
+      .catch((err: any) => {
         console.log(err);
       });
   }
 
-  setTitleBar(filename) {
+  setTitleBar(filename: string) {
     // Set the filename to the title bar
     if (filename) {
       (async () => {
         try {
-          await this.electronService.ipcRenderer.invoke('set-title-bar-name', {
+          await this.electronService.ipcRenderer?.invoke('set-title-bar-name', {
             title: 'Khiops Visualization ' + filename,
           });
         } catch (error) {
@@ -91,13 +92,13 @@ export class FileSystemService {
     }
   }
 
-  openFile(filename, callbackDone?) {
+  openFile(filename: string, callbackDone?: Function) {
     if (filename) {
       // Important to reset datas before loading a new file
       this.configService.setDatas();
 
       this.readFile(filename)
-        .then((datas) => {
+        .then((datas: any) => {
           this.setTitleBar(filename);
           this.setFileHistory(filename);
           this.configService.setDatas(datas);
@@ -105,7 +106,7 @@ export class FileSystemService {
             callbackDone();
           }
         })
-        .catch((error) => {
+        .catch((error: any) => {
           console.warn(this.translate.instant('OPEN_FILE_ERROR'), error);
           this.closeFile();
           Toastify({
@@ -118,32 +119,32 @@ export class FileSystemService {
         });
     }
   }
-  readFile(filename): any {
-    this.fileLoaderDatas.datas = undefined;
-    this.fileLoaderDatas.isLoadingDatas = true;
-    this.fileLoaderDatas.isBigJsonFile = false;
+  readFile(filename: string): any {
+    this.fileLoaderDatas!.datas = undefined;
+    this.fileLoaderDatas!.isLoadingDatas = true;
+    this.fileLoaderDatas!.isBigJsonFile = false;
     this._fileLoaderSub.next(this.fileLoaderDatas);
 
     return new Promise((resolve, reject) => {
-      this.electronService.fs.stat(filename, (err, stats) => {
+      this.electronService.fs.stat(filename, (err: any) => {
         if (err) {
           reject();
         } else {
           this.electronService.fs.readFile(
             filename,
             'utf-8',
-            (errReadFile, datas) => {
+            (errReadFile: NodeJS.ErrnoException, datas: string) => {
               if (errReadFile) {
                 if (
                   errReadFile
                     .toString()
                     .startsWith('Error: Cannot create a string longer')
                 ) {
-                  this.fileLoaderDatas.isBigJsonFile = true;
-                  this.fileLoaderDatas.loadingInfo = '';
+                  this.fileLoaderDatas!.isBigJsonFile = true;
+                  this.fileLoaderDatas!.loadingInfo = '';
                   this._fileLoaderSub.next(this.fileLoaderDatas);
 
-                  const currentDatas = {};
+                  const currentDatas: any = {};
                   const stream = this.electronService.fs.createReadStream(
                     filename,
                     {
@@ -158,8 +159,8 @@ export class FileSystemService {
                     ])
                   );
                   getStream.pipe(
-                    es.map((pipeDatas) => {
-                      this.fileLoaderDatas.loadingInfo = pipeDatas.key;
+                    es.map((pipeDatas: any) => {
+                      this.fileLoaderDatas!.loadingInfo = pipeDatas.key;
                       currentDatas[pipeDatas.key] = pipeDatas.value;
                       this._fileLoaderSub.next(this.fileLoaderDatas);
                     })
@@ -167,29 +168,29 @@ export class FileSystemService {
 
                   getStream
                     .on('end', () => {
-                      this.fileLoaderDatas.datas = currentDatas;
-                      this.fileLoaderDatas.datas.filename = filename;
-                      this.fileLoaderDatas.isLoadingDatas = false;
+                      this.fileLoaderDatas!.datas = currentDatas;
+                      this.fileLoaderDatas!.datas.filename = filename;
+                      this.fileLoaderDatas!.isLoadingDatas = false;
                       this._fileLoaderSub.next(this.fileLoaderDatas);
 
-                      resolve(this.fileLoaderDatas.datas);
+                      resolve(this.fileLoaderDatas?.datas);
                     })
                     .on('error', () => {
                       reject();
                     });
                 } else {
-                  this.fileLoaderDatas.isLoadingDatas = false;
+                  this.fileLoaderDatas!.isLoadingDatas = false;
                   this._fileLoaderSub.next(this.fileLoaderDatas);
 
                   reject(errReadFile);
                 }
               } else {
-                this.fileLoaderDatas.isLoadingDatas = false;
+                this.fileLoaderDatas!.isLoadingDatas = false;
                 try {
-                  this.fileLoaderDatas.datas = JSON.parse(datas);
-                  this.fileLoaderDatas.datas.filename = filename;
+                  this.fileLoaderDatas!.datas = JSON.parse(datas);
+                  this.fileLoaderDatas!.datas.filename = filename;
                   this._fileLoaderSub.next(this.fileLoaderDatas);
-                  resolve(this.fileLoaderDatas.datas);
+                  resolve(this.fileLoaderDatas?.datas);
                 } catch (e) {
                   Toastify({
                     text: this.translate.instant('OPEN_FILE_ERROR'),
@@ -216,9 +217,9 @@ export class FileSystemService {
     });
   }
 
-  setFileHistory(filename) {
+  setFileHistory(filename: string) {
     const currentLs = localStorage.getItem('KHIOPS_VISUALIZATION_OPEN_FILE');
-    let parsedLs = {
+    let parsedLs: { files: string[] } = {
       files: [],
     };
     if (currentLs) {

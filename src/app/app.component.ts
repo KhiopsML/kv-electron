@@ -24,11 +24,11 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('visualizationComponent', {
     static: false,
   })
-  visualizationComponent: ElementRef<HTMLElement>;
+  visualizationComponent?: ElementRef<HTMLElement>;
 
   config: any;
-  btnUpdateText: string;
-  btnUpdate: string;
+  btnUpdateText?: string;
+  btnUpdate?: string;
 
   constructor(
     public ngzone: NgZone,
@@ -52,7 +52,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   setAppConfig() {
-    this.config = this.visualizationComponent.nativeElement;
+    this.config = this.visualizationComponent?.nativeElement;
 
     // @ts-ignore
     const trackerId = APP_CONFIG.TRACKER_ID || ''; // added during CI
@@ -68,12 +68,12 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
           this.constructMenu();
         });
       },
-      onCopyImage: (base64data) => {
+      onCopyImage: (base64data: any) => {
         const natImage =
           this.electronService.nativeImage.createFromDataURL(base64data);
         this.electronService.clipboard.writeImage(natImage);
       },
-      onThemeChanged: (data) => {
+      onThemeChanged: (data: string) => {
         console.log('onThemeChanged', data);
         this.setTheme(data);
       },
@@ -85,7 +85,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     (async () => {
       try {
         if (this.electronService.isElectron) {
-          await this.electronService.ipcRenderer.invoke(
+          await this.electronService.ipcRenderer?.invoke(
             'set-' + theme + '-mode'
           );
         }
@@ -96,28 +96,28 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   addIpcRendererEvents() {
-    this.electronService.ipcRenderer.on('update-available', (event, arg) => {
+    this.electronService.ipcRenderer?.on('update-available', (event, arg) => {
       console.info('update-available', event, arg);
       this.btnUpdate = 'update-available';
       this.btnUpdateText =
         '🔁 ' + this.translate.instant('GLOBAL_UPDATE_UPDATE_AVAILABLE');
       this.constructMenu();
     });
-    this.electronService.ipcRenderer.on(
+    this.electronService.ipcRenderer?.on(
       'update-not-available',
       (event, arg) => {
         console.info('update-not-available', event, arg);
         this.menuService.setUpdateInProgress(false);
       }
     );
-    this.electronService.ipcRenderer.on('update-error', (event, arg) => {
+    this.electronService.ipcRenderer?.on('update-error', (event, arg) => {
       console.info('update-error', event, arg);
       this.menuService.setUpdateInProgress(false);
       // this.btnUpdate = 'update-error';
       // this.btnUpdateText = '⚠ ' + this.translate.instant('GLOBAL_UPDATE_UPDATE_ERROR');
       this.constructMenu();
     });
-    this.electronService.ipcRenderer.on(
+    this.electronService.ipcRenderer?.on(
       'download-progress-info',
       (event, arg) => {
         console.info('download-progress-info', arg && arg.percent);
@@ -142,7 +142,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
     (async () => {
       try {
-        await this.electronService.ipcRenderer.invoke(
+        await this.electronService.ipcRenderer?.invoke(
           'launch-check-for-update'
         );
       } catch (error) {
@@ -152,14 +152,14 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
     // Get input file on windows
     const inputFile =
-      this.electronService.ipcRenderer.sendSync('get-input-file');
+      this.electronService.ipcRenderer?.sendSync('get-input-file');
     if (inputFile && inputFile !== '.') {
       setTimeout(() => {
         this.fileSystemService.openFile(inputFile);
       });
     }
     // Get input files on Mac or Linux
-    this.electronService.ipcRenderer.on('file-open-system', (event, arg) => {
+    this.electronService.ipcRenderer?.on('file-open-system', (event, arg) => {
       if (arg) {
         setTimeout(() => {
           this.fileSystemService.openFile(arg);
@@ -185,7 +185,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             '🔁 ' +
             this.translate.instant('GLOBAL_UPDATE_WAITING_FOR_DOWNLOAD') +
             ' ...';
-          await this.electronService.ipcRenderer.invoke(
+          await this.electronService.ipcRenderer?.invoke(
             'launch-update-available'
           );
           this.constructMenu();

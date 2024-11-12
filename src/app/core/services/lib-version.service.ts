@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-let pjson;
+let pjson: any;
 try {
   pjson = require('../../../../package.json');
 } catch (e) {
@@ -10,7 +10,6 @@ try {
   providedIn: 'root',
 })
 export class LibVersionService {
-
   static getAppVersion() {
     return (pjson && pjson.version) || undefined;
   }

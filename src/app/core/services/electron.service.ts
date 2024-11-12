@@ -15,9 +15,9 @@ try {
   providedIn: 'root',
 })
 export class ElectronService {
-  ipcRenderer: typeof ipcRenderer;
-  webFrame: typeof webFrame;
-  childProcess: typeof childProcess;
+  ipcRenderer?: typeof ipcRenderer;
+  webFrame?: typeof webFrame;
+  childProcess?: typeof childProcess;
   fs: typeof fs;
   dialog: any;
   electron: any;
