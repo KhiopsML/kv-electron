@@ -1,70 +1,133 @@
 name: Update latest.yml with SHA512 Hash
 
 on:
-  workflow_dispatch:
-    inputs:
-      version:
-        description: "Version tag (e.g., X.Y.Z)"
-        required: true
-        default: "1.0.0"
+  push:
+  # workflow_dispatch:
 
 jobs:
   update-latest-yml:
+    permissions:
+      contents: write # to get the draft versions
+      actions: write
     runs-on: windows-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Download Release Assets
-        env:
-          VERSION: ${{ github.event.inputs.version }}
+      - name: Debug GITHUB_OUTPUT
+        shell: pwsh
         run: |
-          # Télécharger l'asset .exe depuis la release
-          $release_info = Invoke-RestMethod -Uri "https://api.github.com/repos/${{ github.repository }}/releases/tags/$env:VERSION" -Headers @{ Authorization = "Bearer ${{ secrets.GITHUB_TOKEN }}" }
-          $exe_asset = $release_info.assets | Where-Object { $_.name -like "khiops-visualization-Setup-$env:VERSION.exe" }
-          $yml_asset = $release_info.assets | Where-Object { $_.name -eq "latest.yml" }
+          Write-Output "GITHUB_OUTPUT: $env:GITHUB_OUTPUT"
 
-          # Vérifier si les assets existent
-          if (-not $exe_asset) { throw "L'asset .exe pour la version $env:VERSION n'a pas été trouvé." }
-          if (-not $yml_asset) { throw "Le fichier latest.yml n'a pas été trouvé dans la release." }
+      - name: Find Latest Draft Release
+        id: find_draft
+        env:
+          GITHUB_TOKEN: ${{ secrets.github_token }}
+        run: |
+          # Retrieve releases
+          $releases = Invoke-RestMethod -Uri "https://api.github.com/repos/KhiopsML/kv-electron/releases" -Headers @{ Authorization = "Bearer $env:GITHUB_TOKEN" }
 
-          # Télécharger les assets
-          Invoke-WebRequest -Uri $exe_asset.browser_download_url -OutFile "khiops-visualization-Setup-$env:VERSION.exe"
-          Invoke-WebRequest -Uri $yml_asset.browser_download_url -OutFile "latest.yml"
+          # Select the latest draft release
+          $draft_release = $releases | Where-Object { $_.draft -eq $true } | Sort-Object -Property created_at -Descending | Select-Object -First 1
+
+          if (-not $draft_release) {
+              throw "No draft release found."
+          }
+
+          echo "Draft release ID: $($draft_release.id)"
+          echo "Draft release name: $($draft_release.name)"
+
+          # echo "::set-output name=draft_release_id::$($draft_release.id)"
+          # echo "::set-output name=draft_tag_name::$($draft_release.name)"
+          # echo "::set-output name=draft_tag::$($draft_release.tag_name)"
+
+          # Write outputs
+          # echo "draft_release_id=$($draft_release.id)" >> $GITHUB_OUTPUT
+          # echo "draft_tag_name=$($draft_release.name)" >> $GITHUB_OUTPUT
+          # echo "draft_tag=$($draft_release.tag_name)" >> $GITHUB_OUTPUT
+
+          echo "draft_release_id=$($draft_release.id)" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+          echo "draft_tag_name=$($draft_release.name)" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+          echo "draft_tag=$($draft_release.tag_name)" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+
+      - name: Debug Outputs
+        run: |
+          echo "Draft Release ID: ${{ steps.find_draft.outputs.draft_release_id }}"
+          echo "Draft Tag Name: ${{ steps.find_draft.outputs.draft_tag_name }}"
+          echo "Draft Tag: ${{ steps.find_draft.outputs.draft_tag }}"
+
+      - name: Download Release Assets
+        uses: robinraju/release-downloader@v1.11
+        with:
+          token: ${{ secrets.github_token }}
+          releaseId: ${{ steps.find_draft.outputs.draft_release_id }}
+          preRelease: true
+          fileName: "latest.yml"
+
+      - name: Download Release Assets
+        uses: robinraju/release-downloader@v1.11
+        with:
+          token: ${{ secrets.github_token }}
+          releaseId: ${{ steps.find_draft.outputs.draft_release_id }}
+          preRelease: true
+          fileName: "*.exe"
+
+      - name: Verify latest.yml
+        shell: pwsh
+        run: |
+          if (Test-Path -Path latest.yml) {
+              Write-Output "latest.yml exists."
+          } else {
+              throw "latest.yml does not exist after download."
+          }
+
+      - name: Display latest content
+        shell: pwsh
+        run: |
+          $ct = Get-Content -Path latest.yml -Raw
+          Write-Output "Content of latest.yml:"
+          Write-Output "$ct"
 
       - name: Compute SHA512 Hash
         id: compute_hash
         shell: pwsh
         run: |
-          $hash = Get-FileHash -Algorithm SHA512 -Path "khiops-visualization-Setup-${{ github.event.inputs.version }}.exe"
+          # Calculate SHA512 hash of the .exe file
+          $exePath = "khiops-visualization-Setup-${{ steps.find_draft.outputs.draft_tag_name }}.exe"
+          $hash = Get-FileHash -Algorithm SHA512 -Path $exePath
           $lowercaseHash = $hash.Hash.ToLower()
-          Write-Output "::set-output name=sha512::$lowercaseHash"
+          # Write-Output "::set-output name=sha512::$lowercaseHash"
+          echo "sha512=$lowercaseHash" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+          echo "-----------> lowercaseHash: $lowercaseHash"
 
       - name: Update latest.yml
         shell: pwsh
         run: |
+          # Update sha512 hash and remove size attribute in latest.yml
           (Get-Content -Path latest.yml) |
           ForEach-Object {
               if ($_ -match '^sha512:\s.*$') {
                   "sha512: ${{ steps.compute_hash.outputs.sha512 }}"
-              } elseif ($_ -notmatch '^size:\s.*$') {
+              } elseif ($_ -match '^\s*sha512:\s.*$') {
+                  "    sha512: ${{ steps.compute_hash.outputs.sha512 }}"
+              } elseif ($_ -notmatch '^\s*size:\s.*$') {
                   $_
               }
           } | Set-Content -Path latest.yml
 
-      - name: Upload updated latest.yml to Release
-        env:
-          VERSION: ${{ github.event.inputs.version }}
-        run: |
-          $release_info = Invoke-RestMethod -Uri "https://api.github.com/repos/${{ github.repository }}/releases/tags/$env:VERSION" -Headers @{ Authorization = "Bearer ${{ secrets.GITHUB_TOKEN }}" }
-          $yml_asset = $release_info.assets | Where-Object { $_.name -eq "latest.yml" }
+          $ct = Get-Content -Path latest.yml -Raw
+          echo "Updated latest.yml content:"
+          echo "-----------------------------"
+          echo "$ct"
+          echo "-----------------------------"
 
-          if ($yml_asset) {
-              Invoke-RestMethod -Uri "https://api.github.com/repos/${{ github.repository }}/releases/assets/$($yml_asset.id)" `
-                                -Method PATCH `
-                                -Headers @{ Authorization = "Bearer ${{ secrets.GITHUB_TOKEN }}"; "Content-Type" = "application/octet-stream" } `
-                                -InFile "latest.yml"
-          } else {
-              throw "Failed to find latest.yml asset in the release."
-          }
+      - uses: IsaacShelton/update-existing-release@v1.3.4
+        with:
+          token: ${{secrets.GITHUB_TOKEN}}
+          release: ${{steps.find_draft.outputs.draft_tag_name}}
+          tag: ${{steps.find_draft.outputs.draft_tag}}
+          draft: true
+          body: ""
+          files: >
+            latest.yml
