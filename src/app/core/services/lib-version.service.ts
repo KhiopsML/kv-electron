@@ -1,22 +1,20 @@
 import { Injectable } from '@angular/core';
-let pjson: any;
-try {
-  pjson = require('../../../../package.json');
-} catch (e) {
-  console.warn('Can not access pjson on browser', e);
-}
+import packageInfo from '../../../../package.json';
 
 @Injectable({
   providedIn: 'root',
 })
 export class LibVersionService {
   static getAppVersion() {
-    return (pjson && pjson.version) || undefined;
+    return packageInfo.version || undefined;
   }
   static getAppTitle() {
-    return (pjson && pjson.title) || undefined;
+    return packageInfo.title || undefined;
   }
   static getAppName() {
-    return (pjson && pjson.name) || undefined;
+    return packageInfo.name || undefined;
+  }
+  static getLibVersion() {
+    return packageInfo.dependencies['khiops-visualization'] || undefined;
   }
 }
