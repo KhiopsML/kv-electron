@@ -1,0 +1,70 @@
+name: Update latest.yml with SHA512 Hash
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version tag (e.g., X.Y.Z)"
+        required: true
+        default: "1.0.0"
+
+jobs:
+  update-latest-yml:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Download Release Assets
+        env:
+          VERSION: ${{ github.event.inputs.version }}
+        run: |
+          # Télécharger l'asset .exe depuis la release
+          $release_info = Invoke-RestMethod -Uri "https://api.github.com/repos/${{ github.repository }}/releases/tags/$env:VERSION" -Headers @{ Authorization = "Bearer ${{ secrets.GITHUB_TOKEN }}" }
+          $exe_asset = $release_info.assets | Where-Object { $_.name -like "khiops-visualization-Setup-$env:VERSION.exe" }
+          $yml_asset = $release_info.assets | Where-Object { $_.name -eq "latest.yml" }
+
+          # Vérifier si les assets existent
+          if (-not $exe_asset) { throw "L'asset .exe pour la version $env:VERSION n'a pas été trouvé." }
+          if (-not $yml_asset) { throw "Le fichier latest.yml n'a pas été trouvé dans la release." }
+
+          # Télécharger les assets
+          Invoke-WebRequest -Uri $exe_asset.browser_download_url -OutFile "khiops-visualization-Setup-$env:VERSION.exe"
+          Invoke-WebRequest -Uri $yml_asset.browser_download_url -OutFile "latest.yml"
+
+      - name: Compute SHA512 Hash
+        id: compute_hash
+        shell: pwsh
+        run: |
+          $hash = Get-FileHash -Algorithm SHA512 -Path "khiops-visualization-Setup-${{ github.event.inputs.version }}.exe"
+          $lowercaseHash = $hash.Hash.ToLower()
+          Write-Output "::set-output name=sha512::$lowercaseHash"
+
+      - name: Update latest.yml
+        shell: pwsh
+        run: |
+          (Get-Content -Path latest.yml) |
+          ForEach-Object {
+              if ($_ -match '^sha512:\s.*$') {
+                  "sha512: ${{ steps.compute_hash.outputs.sha512 }}"
+              } elseif ($_ -notmatch '^size:\s.*$') {
+                  $_
+              }
+          } | Set-Content -Path latest.yml
+
+      - name: Upload updated latest.yml to Release
+        env:
+          VERSION: ${{ github.event.inputs.version }}
+        run: |
+          $release_info = Invoke-RestMethod -Uri "https://api.github.com/repos/${{ github.repository }}/releases/tags/$env:VERSION" -Headers @{ Authorization = "Bearer ${{ secrets.GITHUB_TOKEN }}" }
+          $yml_asset = $release_info.assets | Where-Object { $_.name -eq "latest.yml" }
+
+          if ($yml_asset) {
+              Invoke-RestMethod -Uri "https://api.github.com/repos/${{ github.repository }}/releases/assets/$($yml_asset.id)" `
+                                -Method PATCH `
+                                -Headers @{ Authorization = "Bearer ${{ secrets.GITHUB_TOKEN }}"; "Content-Type" = "application/octet-stream" } `
+                                -InFile "latest.yml"
+          } else {
+              throw "Failed to find latest.yml asset in the release."
+          }
