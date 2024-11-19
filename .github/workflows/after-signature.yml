@@ -1,8 +1,8 @@
 name: Update latest.yml with SHA512 Hash
 
 on:
-  push:
-  # workflow_dispatch:
+  # push:
+  workflow_dispatch:
 
 jobs:
   update-latest-yml:
