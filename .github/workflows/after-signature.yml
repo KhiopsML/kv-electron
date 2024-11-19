@@ -34,13 +34,13 @@ jobs:
           echo "Draft release name: $($draft_release.name)"
 
           # echo "::set-output name=draft_release_id::$($draft_release.id)"
-          echo "{draft_release_id}={draft_release.id}" >> $GITHUB_OUTPUT
+          echo "draft_release_id=$($draft_release.id)" >> $GITHUB_OUTPUT
 
           # echo "::set-output name=draft_tag_name::$($draft_release.name)"
-          echo "{draft_tag_name}={draft_release}.name" >> $GITHUB_OUTPUT
+          echo "draft_tag_name=$(draft_release.name)" >> $GITHUB_OUTPUT
 
           # echo "::set-output name=draft_tag::$($draft_release.tag_name)"
-          echo "{draft_tag}={draft_release.tag_name}" >> $GITHUB_OUTPUT
+          echo "draft_tag=$(draft_release.tag_name)" >> $GITHUB_OUTPUT
 
       - name: Download Release Assets
         uses: robinraju/release-downloader@v1.11
