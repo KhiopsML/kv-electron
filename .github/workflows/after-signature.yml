@@ -15,6 +15,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      - name: Debug GITHUB_OUTPUT
+        shell: pwsh
+        run: |
+          Write-Output "GITHUB_OUTPUT: $env:GITHUB_OUTPUT"
+
       - name: Find Latest Draft Release
         id: find_draft
         env:
@@ -38,9 +43,19 @@ jobs:
           # echo "::set-output name=draft_tag::$($draft_release.tag_name)"
 
           # Write outputs
-          echo "draft_release_id=$($draft_release.id)" >> $GITHUB_OUTPUT
-          echo "draft_tag_name=$($draft_release.name)" >> $GITHUB_OUTPUT
-          echo "draft_tag=$($draft_release.tag_name)" >> $GITHUB_OUTPUT
+          # echo "draft_release_id=$($draft_release.id)" >> $GITHUB_OUTPUT
+          # echo "draft_tag_name=$($draft_release.name)" >> $GITHUB_OUTPUT
+          # echo "draft_tag=$($draft_release.tag_name)" >> $GITHUB_OUTPUT
+
+          echo "draft_release_id=$($draft_release.id)" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+          echo "draft_tag_name=$($draft_release.name)" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+          echo "draft_tag=$($draft_release.tag_name)" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+
+      - name: Debug Outputs
+        run: |
+          echo "Draft Release ID: ${{ steps.find_draft.outputs.draft_release_id }}"
+          echo "Draft Tag Name: ${{ steps.find_draft.outputs.draft_tag_name }}"
+          echo "Draft Tag: ${{ steps.find_draft.outputs.draft_tag }}"
 
       - name: Download Release Assets
         uses: robinraju/release-downloader@v1.11
