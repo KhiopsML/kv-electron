@@ -8289,6 +8289,13 @@ neo-async@^2.6.2:
   resolved "https://registry.npmjs.org/neo-async/-/neo-async-2.6.2.tgz"
   integrity sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==
 
+ngx-matomo-client@6.3.1:
+  version "6.3.1"
+  resolved "https://registry.yarnpkg.com/ngx-matomo-client/-/ngx-matomo-client-6.3.1.tgz#2dc6722e5ac2a9ba503186449873164c7c73a705"
+  integrity sha512-Sr1Idhl9ONOGG7ChlmuEUkLEsxhp6gJGjcVtrxtglak8IZcFV0wjwQ1q/0/4BjEE5IjGOooPboTcQn2cdNir4A==
+  dependencies:
+    tslib "^2.3.0"
+
 nice-napi@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/nice-napi/-/nice-napi-1.0.2.tgz#dc0ab5a1eac20ce548802fc5686eaa6bc654927b"

@@ -4,10 +4,11 @@ import * as remoteMain from '@electron/remote/main';
 remoteMain.initialize();
 import * as path from 'path';
 import * as fs from 'fs';
+import { machineIdSync } from 'node-machine-id';
 const { autoUpdater } = require('electron-updater');
 const log = require('electron-log');
 
-let win: BrowserWindow = null;
+let win: BrowserWindow | null = null;
 const args = process.argv.slice(1),
   serve = args.some((val) => val === '--serve');
 const { dialog } = require('electron');
@@ -31,8 +32,17 @@ autoUpdater.requestHeaders = {
     'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0',
 };
 
+ipcMain.handle('get-machine-id', async () => {
+  try {
+    return machineIdSync();
+  } catch (error) {
+    console.error('Error getting machine ID:', error);
+    return '';
+  }
+});
+
 // return input files on Mac and Linux
-let fileToLoad;
+let fileToLoad: any;
 app.on('will-finish-launching', function () {
   log.info('will-finish-launching');
 
@@ -193,7 +203,7 @@ function checkForUpdates() {
 }
 
 ipcMain.handle('set-title-bar-name', async (event, arg) => {
-  win.setTitle(arg?.title);
+  win?.setTitle(arg?.title);
 });
 
 ipcMain.handle('set-dark-mode', () => {
@@ -211,7 +221,7 @@ ipcMain.handle('set-light-mode', () => {
 autoUpdater.on('checking-for-update', () => {
   log.info('checking-for-update');
 });
-autoUpdater.on('update-available', (info) => {
+autoUpdater.on('update-available', (info: any) => {
   log.info('update-available', info);
   // const dialogOpts: any = {
   //   type: 'info',
@@ -231,40 +241,43 @@ autoUpdater.on('update-available', (info) => {
   }, 2000);
 });
 
-autoUpdater.on('update-not-available', (info) => {
+autoUpdater.on('update-not-available', (info: any) => {
   log.info('update-not-available', info);
   setTimeout(function () {
     win?.webContents?.send('update-not-available', info);
   }, 2000);
 });
 
-autoUpdater.on('download-progress', (progressObj) => {
+autoUpdater.on('download-progress', (progressObj: any) => {
   log.info('download-progress', progressObj);
   win?.webContents?.send('download-progress-info', progressObj);
 });
 
-autoUpdater.on('update-downloaded', (event, releaseNotes, releaseName) => {
-  log.info('update-downloaded', event);
+autoUpdater.on(
+  'update-downloaded',
+  (event: any, releaseNotes: any, releaseName: any) => {
+    log.info('update-downloaded', event);
 
-  const dialogOpts = {
-    type: 'info',
-    buttons: ['Restart and install'],
-    title: 'Application Update',
-    message: process.platform === 'win32' ? releaseNotes : releaseName,
-    detail:
-      'A new version has been downloaded. Restart the application to apply the updates.',
-  };
+    const dialogOpts = {
+      type: 'info',
+      buttons: ['Restart and install'],
+      title: 'Application Update',
+      message: process.platform === 'win32' ? releaseNotes : releaseName,
+      detail:
+        'A new version has been downloaded. Restart the application to apply the updates.',
+    };
 
-  //@ts-ignore
-  dialog.showMessageBox(win, dialogOpts).then(function (res) {
-    log.info('showMessageBox', res);
-    if (res.response === 0) {
-      autoUpdater.quitAndInstall();
-    }
-  });
-});
+    //@ts-ignore
+    dialog.showMessageBox(win, dialogOpts).then(function (res) {
+      log.info('showMessageBox', res);
+      if (res.response === 0) {
+        autoUpdater.quitAndInstall();
+      }
+    });
+  }
+);
 
-autoUpdater.on('error', (message) => {
+autoUpdater.on('error', (message: any) => {
   log.info('error', message);
 
   setTimeout(function () {

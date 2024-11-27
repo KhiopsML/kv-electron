@@ -1,4 +1,5 @@
 export const APP_CONFIG = {
   production: false,
-  environment: 'WEB'
+  environment: 'WEB',
+  TRACKER_ID: '2198',
 };
