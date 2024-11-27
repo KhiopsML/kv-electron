@@ -79,17 +79,15 @@ export class FileSystemService {
 
   setTitleBar(filename: string) {
     // Set the filename to the title bar
-    if (filename) {
-      (async () => {
-        try {
-          await this.electronService.ipcRenderer?.invoke('set-title-bar-name', {
-            title: 'Khiops Visualization ' + filename,
-          });
-        } catch (error) {
-          console.log('error', error);
-        }
-      })();
-    }
+    (async () => {
+      try {
+        await this.electronService.ipcRenderer?.invoke('set-title-bar-name', {
+          title: 'Khiops Visualization ' + filename,
+        });
+      } catch (error) {
+        console.log('error', error);
+      }
+    })();
   }
 
   openFile(filename: string, callbackDone?: Function) {
@@ -214,6 +212,7 @@ export class FileSystemService {
     this.initialize();
     this.ngzone.run(() => {
       this.configService.setDatas();
+      this.setTitleBar('');
     });
   }
 
