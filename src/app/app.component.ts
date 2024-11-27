@@ -38,19 +38,20 @@ export class AppComponent implements AfterViewInit {
     private matomoTracker: MatomoTracker
   ) {
     this.translate.setDefaultLang('en');
+
+    // Disable cookies to prevent coookie consent
+    this.matomoTracker.disableCookies();
+    this.matomoTracker.setDoNotTrack(true);
+
     if (this.electronService.isElectron) {
+      this.matomoTracker.trackPageView();
+      this.matomoTracker.enableFileTracking();
+
       // Get machine ID via IPC
       this.electronService.ipcRenderer
         ?.invoke('get-machine-id')
         .then((machineId: string) => {
-          // this.matomoTracker.disableCookies();
-          // this.matomoTracker.setDoNotTrack(true);
-
-          this.matomoTracker.requireConsent();
-          this.matomoTracker.requireCookieConsent();
-          this.matomoTracker.trackPageView();
           this.matomoTracker.setVisitorId(machineId);
-          this.matomoTracker.enableFileTracking();
         })
         .catch((error: any) => {
           console.error('Error getting machine ID:', error);
@@ -88,15 +89,7 @@ export class AppComponent implements AfterViewInit {
         this.setTheme(data);
       },
       onSendEvent: (event: any) => {
-        if (event.message === 'forgetConsentGiven') {
-          this.matomoTracker.forgetConsentGiven();
-          this.matomoTracker.forgetCookieConsentGiven();
-          this.matomoTracker.deleteCookies();
-        } else if (event.message === 'setConsentGiven') {
-          this.matomoTracker.rememberConsentGiven();
-          this.matomoTracker.rememberCookieConsentGiven();
-          this.matomoTracker.forgetUserOptOut();
-        } else if (event.message === 'trackEvent') {
+        if (event.message === 'trackEvent') {
           this.matomoTracker.trackEvent(
             event.data?.category,
             event.data?.action,

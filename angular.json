@@ -32,7 +32,7 @@
             "assets": ["src/favicon.ico", "src/assets"],
             "styles": ["src/styles.scss"],
             "scripts": [
-              "../visualization-component/dist/khiops-webcomponent/khiops-webcomponents.bundle.js"
+              "node_modules/khiops-visualization/khiops-webcomponents.bundle.js"
             ],
             "customWebpackConfig": {
               "path": "./angular.webpack.js",
