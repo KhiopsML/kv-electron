@@ -11,7 +11,7 @@ import { ElectronService } from './core/services/electron.service';
 import { ConfigService } from './core/services/config.service';
 import { MenuService } from './core/services/menu.service';
 import { FileSystemService } from './core/services/file-system.service';
-import { MatomoTracker } from 'ngx-matomo-client';
+import { TrackerService } from './core/services/tracker.service';
 
 @Component({
   selector: 'app-root',
@@ -35,28 +35,11 @@ export class AppComponent implements AfterViewInit {
     private configService: ConfigService,
     private translate: TranslateService,
     private menuService: MenuService,
-    private matomoTracker: MatomoTracker
+    private trackerService: TrackerService
   ) {
     this.translate.setDefaultLang('en');
 
-    // Disable cookies to prevent coookie consent
-    this.matomoTracker.disableCookies();
-    this.matomoTracker.setDoNotTrack(true);
-
-    if (this.electronService.isElectron) {
-      this.matomoTracker.trackPageView();
-      this.matomoTracker.enableFileTracking();
-
-      // Get machine ID via IPC
-      this.electronService.ipcRenderer
-        ?.invoke('get-machine-id')
-        .then((machineId: string) => {
-          this.matomoTracker.setVisitorId(machineId);
-        })
-        .catch((error: any) => {
-          console.error('Error getting machine ID:', error);
-        });
-    }
+    this.trackerService.initialize();
   }
 
   ngAfterViewInit() {
@@ -89,13 +72,12 @@ export class AppComponent implements AfterViewInit {
         this.setTheme(data);
       },
       onSendEvent: (event: any) => {
-        if (event.message === 'trackEvent') {
-          this.matomoTracker.trackEvent(
-            event.data?.category,
-            event.data?.action,
-            event.data?.name,
-            event.data?.value
-          );
+        if (event.message === 'forgetConsentGiven') {
+          this.trackerService.forgetConsentGiven();
+        } else if (event.message === 'setConsentGiven') {
+          this.trackerService.setConsentGiven();
+        } else if (event.message === 'trackEvent') {
+          this.trackerService.trackEvent(event.data);
         }
       },
     });

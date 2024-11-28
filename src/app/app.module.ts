@@ -20,7 +20,6 @@ import { AppComponent } from './app.component';
 import { BigFileLoadingComponent } from './big-file-loading/big-file-loading.component';
 import { CommonModule } from '@angular/common';
 import { MatomoModule } from 'ngx-matomo-client';
-import { APP_CONFIG } from '../environments/environment';
 
 // AoT requires an exported function for factories
 const httpLoaderFactory = (http: HttpClient): TranslateHttpLoader =>
@@ -47,13 +46,7 @@ export function setupTranslateFactory(service: TranslateService) {
       },
     }),
     MatomoModule.forRoot({
-      scriptUrl: 'https://matomo.apps.tech.orange/matomo.js',
-      trackers: [
-        {
-          trackerUrl: 'https://matomo.apps.tech.orange/',
-          siteId: APP_CONFIG.TRACKER_ID,
-        },
-      ],
+      mode: 'deferred', // defer loading to set unique visitorId
     }),
   ],
   providers: [
