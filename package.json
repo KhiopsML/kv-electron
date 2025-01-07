@@ -2,7 +2,7 @@
   "name": "khiops-visualization",
   "title": "khiops Visualization",
   "main": "app/main.js",
-  "version": "11.0.10",
+  "version": "11.0.11",
   "license": "BSD-3-Clause-Clear",
   "author": {
     "name": "Orange",
@@ -80,7 +80,7 @@
     "electron-log": "3.0.9",
     "electron-updater": "6.3.1",
     "event-stream": "4.0.1",
-    "khiops-visualization": "11.5.1",
+    "khiops-visualization": "11.5.2",
     "ngx-matomo-client": "6.3.1",
     "rxjs": "7.8.1",
     "toastify-js": "1.12.0",
