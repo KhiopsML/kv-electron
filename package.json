@@ -61,7 +61,7 @@
     "electron:publish": "npm run build:prod && electron-builder build --publish=never",
     "electron:mac": "npm run build:prod && electron-builder build --mac -p always",
     "lint": "ng lint",
-    "updateElectron": "npx cross-env ELECTRON_GET_USE_PROXY=true GLOBAL_AGENT_HTTPS_PROXY=http://proxypac.si.francetelecom.fr:8080/ yarn add electron@33.2.0 --force --legacy-peer-deps",
+    "addHeader": "ts-node scripts/add-header.js",
     "updateVersions": "ncu -u --target minor"
   },
   "dependencies": {

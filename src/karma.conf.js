@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2023-2025 Orange. All rights reserved.
+ * This software is distributed under the BSD 3-Clause-clear License, the text of which is available
+ * at https://spdx.org/licenses/BSD-3-Clause-Clear.html or see the "LICENSE" file for more details.
+ */
+
 // Karma configuration file, see link for more information
 // https://karma-runner.github.io/0.13/config/configuration-file.html
 
