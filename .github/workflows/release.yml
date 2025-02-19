@@ -35,6 +35,9 @@ jobs:
           mkdir -p ~/private_keys/
           echo '${{ secrets.api_key }}' > ~/private_keys/AuthKey_${{ secrets.api_key_id }}.p8
 
+      - name: Force Install Dependencies Before Build
+        run: yarn install --verbose
+
       - name: Build/release Electron
         uses: samuelmeuli/action-electron-builder@v1.6.0
         with:
@@ -51,6 +54,7 @@ jobs:
           mac_certs: ${{ secrets.mac_certs }}
           mac_certs_password: ${{ secrets.mac_certs_password }}
         env:
+          DEBUG: electron-builder
           # macOS notarization API key
           API_KEY_ID: ${{ secrets.api_key_id }}
           API_KEY_ISSUER_ID: ${{ secrets.api_key_issuer_id }}
