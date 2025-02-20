@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       milestone_title:
-        description: "Milestone title"
+        description: "Milestone title. eg: 11.0.12"
         required: true
 
 jobs:
@@ -33,12 +33,12 @@ jobs:
           ISSUES=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
           -H "Accept: application/vnd.github.v3+json" \
           "https://api.github.com/repos/${{ github.repository }}/issues?milestone=${{ env.milestone_id }}&state=closed&per_page=100" | \
-          jq -r '.[].title')
+          jq -r '.[] | "\(.title) #\(.number)"')
 
           if [ -z "$ISSUES" ]; then
             echo "❌ No closed issues found for the milestone ${{ github.event.inputs.milestone_title }}"
             exit 1
           fi
 
-          echo "### 📋 Closed Issues:"
+          echo "### Issues:"
           echo "$ISSUES"
