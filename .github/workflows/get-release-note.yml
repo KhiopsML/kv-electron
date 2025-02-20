@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       milestone_title:
-        description: 'Milestone title'
+        description: "Milestone title"
         required: true
 
 jobs:
@@ -17,7 +17,7 @@ jobs:
         run: |
           MILESTONE_ID=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
           -H "Accept: application/vnd.github.v3+json" \
-          "https://api.github.com/repos/${{ github.repository }}/milestones" | \
+          "https://api.github.com/repos/${{ github.repository }}/milestones?state=all&sort=due_on&direction=desc" | \
           jq '.[] | select(.title=="${{ github.event.inputs.milestone_title }}") | .number')
 
           if [ -z "$MILESTONE_ID" ]; then
