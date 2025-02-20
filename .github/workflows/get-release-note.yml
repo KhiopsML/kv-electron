@@ -1,0 +1,44 @@
+name: Get Milestone Issues
+
+on:
+  workflow_dispatch:
+    inputs:
+      milestone_title:
+        description: 'Milestone title'
+        required: true
+
+jobs:
+  get-milestone-issues:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Get Milestone ID
+        id: get_milestone_id
+        run: |
+          MILESTONE_ID=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          -H "Accept: application/vnd.github.v3+json" \
+          "https://api.github.com/repos/${{ github.repository }}/milestones" | \
+          jq '.[] | select(.title=="${{ github.event.inputs.milestone_title }}") | .number')
+
+          if [ -z "$MILESTONE_ID" ]; then
+            echo "❌ No milestone found with the title ${{ github.event.inputs.milestone_title }}"
+            exit 1
+          fi
+
+          echo "Milestone ID: $MILESTONE_ID"
+          echo "milestone_id=$MILESTONE_ID" >> $GITHUB_ENV
+
+      - name: Get Closed Issues Titles
+        run: |
+          ISSUES=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          -H "Accept: application/vnd.github.v3+json" \
+          "https://api.github.com/repos/${{ github.repository }}/issues?milestone=${{ env.milestone_id }}&state=closed&per_page=100" | \
+          jq -r '.[].title')
+
+          if [ -z "$ISSUES" ]; then
+            echo "❌ No closed issues found for the milestone ${{ github.event.inputs.milestone_title }}"
+            exit 1
+          fi
+
+          echo "### 📋 Closed Issues:"
+          echo "$ISSUES"
