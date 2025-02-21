@@ -20,9 +20,10 @@ import { FileSystemService } from './core/services/file-system.service';
 import { TrackerService } from './core/services/tracker.service';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'],
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.scss'],
+    standalone: false
 })
 export class AppComponent implements AfterViewInit {
   @ViewChild('visualizationComponent', {

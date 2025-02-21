@@ -5,11 +5,7 @@
  */
 
 import { BrowserModule } from '@angular/platform-browser';
-import {
-  NgModule,
-  CUSTOM_ELEMENTS_SCHEMA,
-  APP_INITIALIZER,
-} from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA, inject, provideAppInitializer } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { CoreModule } from './core/core.module';
@@ -57,12 +53,10 @@ export function setupTranslateFactory(service: TranslateService) {
   ],
   providers: [
     TranslateService,
-    {
-      provide: APP_INITIALIZER,
-      useFactory: setupTranslateFactory,
-      deps: [TranslateService],
-      multi: true,
-    },
+    provideAppInitializer(() => {
+        const initializerFn = (setupTranslateFactory)(inject(TranslateService));
+        return initializerFn();
+      }),
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   bootstrap: [AppComponent],
