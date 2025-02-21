@@ -2587,15 +2587,19 @@
   resolved "https://registry.npmjs.org/@ngtools/webpack/-/webpack-18.2.5.tgz"
   integrity sha512-L0n4eHObeqEOYRfSP+e4SeF/dmwxOIFy9xYvYCOUwOLrW4b3+a1+kkT30pqyfL72LFtpf0cmUwaWEFIcWl5PCg==
 
-"@ngx-translate/core@15.0.0":
-  version "15.0.0"
-  resolved "https://registry.npmjs.org/@ngx-translate/core/-/core-15.0.0.tgz"
-  integrity sha512-Am5uiuR0bOOxyoercDnAA3rJVizo4RRqJHo8N3RqJ+XfzVP/I845yEnMADykOHvM6HkVm4SZSnJBOiz0Anx5BA==
+"@ngx-translate/core@16.0.4":
+  version "16.0.4"
+  resolved "https://registry.yarnpkg.com/@ngx-translate/core/-/core-16.0.4.tgz#8e17d6ed6b306803ed2eb19ab72a0fdb697f1d76"
+  integrity sha512-s8llTL2SJvROhqttxvEs7Cg+6qSf4kvZPFYO+cTOY1d8DWTjlutRkWAleZcPPoeX927Dm7ALfL07G7oYDJ7z6w==
+  dependencies:
+    tslib "^2.3.0"
 
-"@ngx-translate/http-loader@8.0.0":
-  version "8.0.0"
-  resolved "https://registry.npmjs.org/@ngx-translate/http-loader/-/http-loader-8.0.0.tgz"
-  integrity sha512-SFMsdUcmHF5OdZkL1CHEoSAwbP5EbAOPTLLboOCRRoOg21P4GJx+51jxGdJeGve6LSKLf4Pay7BkTwmE6vxYlg==
+"@ngx-translate/http-loader@16.0.1":
+  version "16.0.1"
+  resolved "https://registry.yarnpkg.com/@ngx-translate/http-loader/-/http-loader-16.0.1.tgz#01219d623ea810fd36ba2911d1452975cd32a041"
+  integrity sha512-xJEOUpvs6Zfc8G4cmQmegFOEpfYSoplTHHoisPNrATXjRBjpaKsBaPOXlZsuFUW2XV00s16gIyI4+9z1XkO5bw==
+  dependencies:
+    tslib "^2.3.0"
 
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
