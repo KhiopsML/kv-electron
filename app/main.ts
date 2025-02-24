@@ -156,7 +156,7 @@ try {
   // throw e;
 }
 
-ipcMain.on('get-input-file', async (event, arg) => {
+ipcMain.on('get-input-file', async (event: any) => {
   try {
     log.info('get-input-file');
     // return input files on Windows
@@ -166,7 +166,7 @@ ipcMain.on('get-input-file', async (event, arg) => {
   }
 });
 
-ipcMain.handle('launch-update-available', async (event, arg) => {
+ipcMain.handle('launch-update-available', async () => {
   try {
     log.info('launch-update-available');
     autoUpdater.downloadUpdate();
@@ -176,7 +176,7 @@ ipcMain.handle('launch-update-available', async (event, arg) => {
   }
 });
 
-ipcMain.handle('launch-check-for-update', async (event, arg) => {
+ipcMain.handle('launch-check-for-update', async () => {
   try {
     log.info('launch-check-for-update');
     checkForUpdates();
@@ -202,7 +202,7 @@ function checkForUpdates() {
     });
 }
 
-ipcMain.handle('set-title-bar-name', async (event, arg) => {
+ipcMain.handle('set-title-bar-name', async (_event: any, arg: any) => {
   win?.setTitle(arg?.title);
 });
 

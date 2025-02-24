@@ -18,17 +18,21 @@ Based on https://github.com/maximegris/angular-electron.git
 
 First clone and install a local copy of visualization-component
 then replace:
+
 ```
 "scripts": [
   "node_modules/khiops-visualization/khiops-webcomponents.bundle.js"
 ],
 ```
+
 with:
+
 ```
 "scripts": [
   "../visualization-component/dist/khiops-webcomponent/khiops-webcomponents.bundle.js"
 ],
 ```
+
 to load local copy of visualization-component
 
 Into visualization-component, run:
@@ -45,8 +49,6 @@ Into electron folder, run:
 
 **DO NOT CHANGE PORT WHEN PROMPED to debug directly visualization-component into Electron**
 
-
 ## Boilerplate change log
 
 https://github.com/maximegris/angular-electron/blob/master/CHANGELOG.md
-
