@@ -14,6 +14,11 @@ const args = process.argv.slice(1),
 const { dialog } = require('electron');
 const { ipcMain } = require('electron');
 
+const electronReload = require('electron-reload');
+electronReload(
+  path.join(__dirname, '../visualization-component/dist/khiops-webcomponent/')
+);
+
 process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';
 
 log.transports.file.level = 'info';
@@ -103,6 +108,9 @@ function createWindow(): BrowserWindow {
 
     require('electron-reloader')(module);
     win.loadURL('http://localhost:4200');
+
+    const setupReloading = require('../electron-reload.js');
+    setupReloading(win);
   } else {
     // Path when running electron executable
     let pathIndex = './index.html';
