@@ -9,10 +9,10 @@ import { FileSystemService } from '../core/services/file-system.service';
 import { Subscription } from 'rxjs';
 
 @Component({
-    selector: 'app-big-file-loading',
-    templateUrl: './big-file-loading.component.html',
-    styleUrl: './big-file-loading.component.scss',
-    standalone: false
+  selector: 'app-big-file-loading',
+  templateUrl: './big-file-loading.component.html',
+  styleUrl: './big-file-loading.component.scss',
+  standalone: false,
 })
 export class BigFileLoadingComponent {
   private fileLoaderSub?: Subscription;
