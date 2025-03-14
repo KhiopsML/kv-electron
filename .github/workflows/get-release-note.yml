@@ -6,9 +6,6 @@ on:
       milestone_title:
         description: "Milestone title. eg: 11.0.12"
         required: true
-  push:
-    tags:
-      - "*"
 
 jobs:
   get-milestone-issues:
