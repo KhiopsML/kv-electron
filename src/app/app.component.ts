@@ -63,7 +63,6 @@ export class AppComponent implements AfterViewInit {
     //@ts-ignore
     this.config.setConfig({
       appSource: 'ELECTRON',
-      showProjectTab: true,
       onFileOpen: () => {
         console.log('fileOpen');
         this.menuService.openFileDialog(() => {
