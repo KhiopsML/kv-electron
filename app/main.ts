@@ -7,17 +7,13 @@ import * as fs from 'fs';
 import { machineIdSync } from 'node-machine-id';
 const { autoUpdater } = require('electron-updater');
 const log = require('electron-log');
+import * as url from 'url';
 
 let win: BrowserWindow | null = null;
 const args = process.argv.slice(1),
   serve = args.some((val) => val === '--serve');
 const { dialog } = require('electron');
 const { ipcMain } = require('electron');
-
-const electronReload = require('electron-reload');
-electronReload(
-  path.join(__dirname, '../visualization-component/dist/khiops-webcomponent/')
-);
 
 process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';
 
@@ -109,6 +105,13 @@ function createWindow(): BrowserWindow {
     require('electron-reloader')(module);
     win.loadURL('http://localhost:4200');
 
+    const electronReload = require('electron-reload');
+    electronReload(
+      path.join(
+        __dirname,
+        '../visualization-component/dist/khiops-webcomponent/'
+      )
+    );
     const setupReloading = require('../electron-reload.js');
     setupReloading(win);
   } else {
@@ -120,9 +123,13 @@ function createWindow(): BrowserWindow {
       pathIndex = '../dist/index.html';
     }
 
-    const url = new URL(path.join('file:', __dirname, pathIndex));
+    const urlPath = url.format({
+      pathname: path.join(__dirname, pathIndex),
+      protocol: 'file:',
+      slashes: true,
+    });
 
-    win.loadURL(url.href);
+    win.loadURL(urlPath);
   }
 
   // Emitted when the window is closed.
