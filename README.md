@@ -19,7 +19,7 @@ Based on https://github.com/maximegris/angular-electron.git
 Run:
 
 ```
-# yarn buildDev:webcomponents
+# yarn dev
 ```
 
 This will replace visualization-component lib with the current local copy:
