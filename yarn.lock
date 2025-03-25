@@ -7816,10 +7816,10 @@ keyv@^4.0.0, keyv@^4.5.3:
   dependencies:
     json-buffer "3.0.1"
 
-khiops-visualization@11.5.6:
-  version "11.5.6"
-  resolved "https://registry.yarnpkg.com/khiops-visualization/-/khiops-visualization-11.5.6.tgz#1fa567d97cfe0df03a1608ce3615d140484d8342"
-  integrity sha512-q4E51Im7nPopvjTiDKTuPxaTBb48OX/nyQ2wd/shTnRT+q8/JWe+ScJfyST4/bJfrYD7oEG4Wa2ngQqqfXUjtg==
+khiops-visualization@11.6.0:
+  version "11.6.0"
+  resolved "https://registry.yarnpkg.com/khiops-visualization/-/khiops-visualization-11.6.0.tgz#916b246479e67a61038e2767f407c23524beb6af"
+  integrity sha512-h/dcOqcp1/a4J0mjda81Eykt4BzMPWrw7raZaEoIjTh8EaBSEzcJjtSXHHWhfxE2Y7iFDOBpvs4EiPPL34gxuA==
 
 kind-of@^6.0.2:
   version "6.0.3"
