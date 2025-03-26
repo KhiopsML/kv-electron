@@ -226,7 +226,7 @@ ipcMain.handle('set-dark-mode', () => {
 });
 
 ipcMain.handle('set-orange-mode', () => {
-  nativeTheme.themeSource = 'dark';
+  nativeTheme.themeSource = 'light';
 });
 
 ipcMain.handle('set-light-mode', () => {
