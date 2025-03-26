@@ -83,7 +83,7 @@
     "electron-log": "3.0.9",
     "electron-updater": "6.6.0",
     "event-stream": "4.0.1",
-    "khiops-visualization": "11.6.0",
+    "khiops-visualization": "11.6.2",
     "ngx-matomo-client": "6.4.1",
     "postcss-loader": "8.1.1",
     "rxjs": "7.8.1",
