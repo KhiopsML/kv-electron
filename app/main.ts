@@ -1,4 +1,4 @@
-import { app, BrowserWindow, screen, nativeTheme } from 'electron';
+import { app, BrowserWindow, screen } from 'electron';
 import * as electron from 'electron';
 import * as remoteMain from '@electron/remote/main';
 remoteMain.initialize();
@@ -219,18 +219,6 @@ function checkForUpdates() {
 
 ipcMain.handle('set-title-bar-name', async (_event: any, arg: any) => {
   win?.setTitle(arg?.title);
-});
-
-ipcMain.handle('set-dark-mode', () => {
-  nativeTheme.themeSource = 'dark';
-});
-
-ipcMain.handle('set-orange-mode', () => {
-  nativeTheme.themeSource = 'light';
-});
-
-ipcMain.handle('set-light-mode', () => {
-  nativeTheme.themeSource = 'light';
 });
 
 autoUpdater.on('checking-for-update', () => {

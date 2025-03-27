@@ -74,10 +74,6 @@ export class AppComponent implements AfterViewInit {
           this.electronService.nativeImage.createFromDataURL(base64data);
         this.electronService.clipboard.writeImage(natImage);
       },
-      onThemeChanged: (data: string) => {
-        console.log('onThemeChanged', data);
-        this.setTheme(data);
-      },
       onSendEvent: (event: any) => {
         if (event.message === 'forgetConsentGiven') {
           this.trackerService.forgetConsentGiven();
@@ -89,20 +85,6 @@ export class AppComponent implements AfterViewInit {
       },
     });
     this.configService.setConfig(this.config);
-  }
-
-  setTheme(theme = 'light') {
-    (async () => {
-      try {
-        if (this.electronService.isElectron) {
-          await this.electronService.ipcRenderer?.invoke(
-            'set-' + theme + '-mode'
-          );
-        }
-      } catch (error) {
-        console.log('error', error);
-      }
-    })();
   }
 
   addIpcRendererEvents() {
