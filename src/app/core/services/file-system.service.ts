@@ -11,6 +11,7 @@ import { ConfigService } from './config.service';
 import { BehaviorSubject, Observable } from 'rxjs';
 // @ts-ignore
 import Toastify from 'toastify-js';
+import { StorageService } from './storage.service';
 
 let es: any;
 try {
@@ -43,7 +44,8 @@ export class FileSystemService {
     private ngzone: NgZone,
     private configService: ConfigService,
     private electronService: ElectronService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private storageService: StorageService
   ) {
     this.initialize();
   }
@@ -223,41 +225,35 @@ export class FileSystemService {
   }
 
   setFileHistory(filename: string) {
-    const currentLs = localStorage.getItem('KHIOPS_VISUALIZATION_OPEN_FILE');
-    let parsedLs: { files: string[] } = {
-      files: [],
-    };
-    if (currentLs) {
-      parsedLs = JSON.parse(currentLs);
-      const isExistingHistoryIndex = parsedLs.files.indexOf(filename);
+    let filesHistory = this.storageService.getOne('OPEN_FILE');
+    if (filesHistory) {
+      const isExistingHistoryIndex = filesHistory.files.indexOf(filename);
 
       if (isExistingHistoryIndex !== -1) {
         // remove at index
-        parsedLs.files.splice(isExistingHistoryIndex, 1);
+        filesHistory.files.splice(isExistingHistoryIndex, 1);
       } else {
         // remove last item
-        if (parsedLs.files.length >= 5) {
-          parsedLs.files.splice(-1, 1);
+        if (filesHistory.files.length >= 5) {
+          filesHistory.files.splice(-1, 1);
         }
       }
-    }
-
-    // add to the top of the list
-    parsedLs.files.unshift(filename);
-    localStorage.setItem(
-      'KHIOPS_VISUALIZATION_OPEN_FILE',
-      JSON.stringify(parsedLs)
-    );
-  }
-
-  getFileHistory() {
-    const currentLs = localStorage.getItem('KHIOPS_VISUALIZATION_OPEN_FILE');
-    if (currentLs) {
-      return JSON.parse(currentLs);
     } else {
-      return {
+      filesHistory = {
         files: [],
       };
     }
+    // add to the top of the list
+    filesHistory.files.unshift(filename);
+    this.storageService.setOne('OPEN_FILE', filesHistory);
+  }
+
+  getFileHistory() {
+    const filesHistory = this.storageService.getOne('OPEN_FILE');
+    return (
+      filesHistory || {
+        files: [],
+      }
+    );
   }
 }

@@ -10,22 +10,24 @@ import { ElectronService } from './electron.service';
 import { FileSystemService } from './file-system.service';
 import { LibVersionService } from './lib-version.service';
 import { ConfigService } from './config.service';
+import { StorageService } from './storage.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class MenuService {
-  private currentChannel =
-    localStorage.getItem('KHIOPS_VISUALIZATION_CHANNEL') || 'latest';
-
+  private currentChannel: string = 'latest';
   private updateInProgress = false;
 
   constructor(
     private electronService: ElectronService,
     private configService: ConfigService,
     private translate: TranslateService,
-    private fileSystemService: FileSystemService
-  ) {}
+    private fileSystemService: FileSystemService,
+    private storageService: StorageService
+  ) {
+    this.currentChannel = this.storageService.getOne('CHANNEL');
+  }
 
   setUpdateInProgress(value = false) {
     this.updateInProgress = value;
@@ -68,15 +70,19 @@ export class MenuService {
           label: this.translate.instant('GLOBAL_MENU_RESTART_APP'),
           accelerator: 'CommandOrControl+R',
           click: () => {
-            this.electronService.remote.app.relaunch();
-            this.electronService.remote.app.exit(0);
+            this.storageService.saveAll(() => {
+              this.electronService.remote.app.relaunch();
+              this.electronService.remote.app.exit(0);
+            });
           },
         },
         {
           label: this.translate.instant('GLOBAL_MENU_EXIT'),
           accelerator: 'CommandOrControl+Q',
           click: () => {
-            this.electronService.remote.app.quit();
+            this.storageService.saveAll(() => {
+              this.electronService.remote.app.quit();
+            });
           },
         },
       ],
@@ -279,7 +285,7 @@ export class MenuService {
   }
 
   setChannel(channel: string) {
-    localStorage.setItem('KHIOPS_VISUALIZATION_CHANNEL', channel);
+    this.storageService.setOne('CHANNEL', channel);
     this.currentChannel = channel;
 
     (async () => {
