@@ -11,7 +11,7 @@ import { ElectronService } from './electron.service';
   providedIn: 'root',
 })
 export class StorageService {
-  private _storage: any = undefined;
+  private _storage: any = {};
   private _storageKey: string = 'KHIOPS_VISUALIZATION_';
 
   constructor(private electronService: ElectronService) {
@@ -27,7 +27,8 @@ export class StorageService {
 
   getAll() {
     try {
-      this._storage = this.electronService.storage?.getSync(this._storageKey);
+      this._storage =
+        this.electronService.storage?.getSync(this._storageKey) || {};
     } catch {
       this.electronService.storage?.set(this._storageKey, {});
     }
