@@ -15,7 +15,7 @@ export class StorageService {
   private _storageKey: string = 'KHIOPS_VISUALIZATION_';
 
   constructor(private electronService: ElectronService) {
-    this.electronService.storage.setDataPath(this.electronService.os.tmpdir());
+    this.electronService.storage?.setDataPath(this.electronService.os.tmpdir());
     this.getAll();
   }
 
