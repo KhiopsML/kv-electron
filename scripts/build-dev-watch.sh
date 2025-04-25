@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# Chemin vers le fichier angular.json (un niveau plus haut)
 ANGULAR_JSON="angular.json"
 
 # Update the angular.json file to replace the script path

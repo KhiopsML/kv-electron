@@ -19,6 +19,7 @@ import { MenuService } from './core/services/menu.service';
 import { FileSystemService } from './core/services/file-system.service';
 import { TrackerService } from './core/services/tracker.service';
 import 'khiops-visualization';
+import { StorageService } from './core/services/storage.service';
 
 @Component({
   selector: 'app-root',
@@ -40,6 +41,7 @@ export class AppComponent implements AfterViewInit {
     public ngzone: NgZone,
     private electronService: ElectronService,
     private fileSystemService: FileSystemService,
+    private storageService: StorageService,
     private configService: ConfigService,
     private translate: TranslateService,
     private menuService: MenuService,
@@ -63,6 +65,7 @@ export class AppComponent implements AfterViewInit {
     //@ts-ignore
     this.config.setConfig({
       appSource: 'ELECTRON',
+      storage: 'ELECTRON',
       onFileOpen: () => {
         console.log('fileOpen');
         this.menuService.openFileDialog(() => {
@@ -74,35 +77,23 @@ export class AppComponent implements AfterViewInit {
           this.electronService.nativeImage.createFromDataURL(base64data);
         this.electronService.clipboard.writeImage(natImage);
       },
-      onThemeChanged: (data: string) => {
-        console.log('onThemeChanged', data);
-        this.setTheme(data);
-      },
-      onSendEvent: (event: any) => {
+      onSendEvent: (event: { message: string; data: any }, cb?: Function) => {
         if (event.message === 'forgetConsentGiven') {
           this.trackerService.forgetConsentGiven();
         } else if (event.message === 'setConsentGiven') {
           this.trackerService.setConsentGiven();
         } else if (event.message === 'trackEvent') {
           this.trackerService.trackEvent(event.data);
+        } else if (event.message === 'ls.getAll') {
+          cb && cb(this.storageService.getAll());
+        } else if (event.message === 'ls.saveAll') {
+          this.storageService.saveAll();
+        } else if (event.message === 'ls.delAll') {
+          this.storageService.delAll();
         }
       },
     });
     this.configService.setConfig(this.config);
-  }
-
-  setTheme(theme = 'light') {
-    (async () => {
-      try {
-        if (this.electronService.isElectron) {
-          await this.electronService.ipcRenderer?.invoke(
-            'set-' + theme + '-mode'
-          );
-        }
-      } catch (error) {
-        console.log('error', error);
-      }
-    })();
   }
 
   addIpcRendererEvents() {
@@ -147,6 +138,9 @@ export class AppComponent implements AfterViewInit {
         this.constructMenu();
       }
     );
+    this.electronService.ipcRenderer?.on('before-quit', (event, arg) => {
+      this.beforeQuit();
+    });
 
     this.constructMenu();
 
@@ -175,6 +169,12 @@ export class AppComponent implements AfterViewInit {
           this.fileSystemService.openFile(arg);
         });
       }
+    });
+  }
+
+  beforeQuit() {
+    this.storageService.saveAll(() => {
+      this.electronService.remote.app.exit(0);
     });
   }
 

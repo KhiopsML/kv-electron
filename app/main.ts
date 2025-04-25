@@ -1,4 +1,4 @@
-import { app, BrowserWindow, screen, nativeTheme } from 'electron';
+import { app, BrowserWindow, screen } from 'electron';
 import * as electron from 'electron';
 import * as remoteMain from '@electron/remote/main';
 remoteMain.initialize();
@@ -8,6 +8,7 @@ import { machineIdSync } from 'node-machine-id';
 const { autoUpdater } = require('electron-updater');
 const log = require('electron-log');
 import * as url from 'url';
+const storage = require('electron-json-storage');
 
 let win: BrowserWindow | null = null;
 const args = process.argv.slice(1),
@@ -140,6 +141,11 @@ function createWindow(): BrowserWindow {
     win = null;
   });
 
+  win.on('close', (event) => {
+    event.preventDefault();
+    win?.webContents?.send('before-quit');
+  });
+
   return win;
 }
 
@@ -201,36 +207,15 @@ ipcMain.handle('launch-check-for-update', async () => {
 });
 
 function checkForUpdates() {
-  win?.webContents
-    ?.executeJavaScript(
-      'localStorage.getItem("KHIOPS_VISUALIZATION_CHANNEL");',
-      true
-    )
-    .then((result) => {
-      console.log(result);
-      log.info('channel', result);
-      const userChannel = result || 'latest';
-      autoUpdater.allowPrerelease = userChannel === 'beta';
-
-      log.info('checkForUpdates');
-      autoUpdater.checkForUpdates();
-    });
+  const lsDatas = storage.get('KHIOPS_VISUALIZATION_');
+  const userChannel = lsDatas['CHANNEL'] || 'latest';
+  autoUpdater.allowPrerelease = userChannel === 'beta';
+  log.info('checkForUpdates');
+  autoUpdater.checkForUpdates();
 }
 
 ipcMain.handle('set-title-bar-name', async (_event: any, arg: any) => {
   win?.setTitle(arg?.title);
-});
-
-ipcMain.handle('set-dark-mode', () => {
-  nativeTheme.themeSource = 'dark';
-});
-
-ipcMain.handle('set-orange-mode', () => {
-  nativeTheme.themeSource = 'dark';
-});
-
-ipcMain.handle('set-light-mode', () => {
-  nativeTheme.themeSource = 'light';
 });
 
 autoUpdater.on('checking-for-update', () => {

@@ -31,6 +31,8 @@ export class ElectronService {
   shell: any;
   clipboard: any;
   nativeImage: any;
+  storage: any;
+  os: any;
 
   constructor() {
     if (this.isElectron) {
@@ -44,6 +46,8 @@ export class ElectronService {
       this.shell = this.electron.shell;
       this.clipboard = window.require('electron').clipboard;
       this.nativeImage = window.require('electron').nativeImage;
+      this.storage = window.require('electron-json-storage');
+      this.os = window.require('os');
 
       // this.childProcess.exec('node -v', (error, stdout, stderr) => {
       //   if (error) {
