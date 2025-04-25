@@ -9,7 +9,6 @@ const { autoUpdater } = require('electron-updater');
 const log = require('electron-log');
 import * as url from 'url';
 const storage = require('electron-json-storage');
-import debug from 'electron-debug';
 
 let win: BrowserWindow | null = null;
 const args = process.argv.slice(1),
@@ -101,6 +100,7 @@ function createWindow(): BrowserWindow {
   // win.webContents.openDevTools();
 
   if (serve) {
+    const debug = require('electron-debug');
     debug();
 
     require('electron-reloader')(module);
