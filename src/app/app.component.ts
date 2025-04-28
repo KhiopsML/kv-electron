@@ -159,14 +159,20 @@ export class AppComponent implements AfterViewInit {
       this.electronService.ipcRenderer?.sendSync('get-input-file');
     if (inputFile && inputFile !== '.') {
       setTimeout(() => {
-        this.fileSystemService.openFile(inputFile);
+        this.fileSystemService.openFile(inputFile, () => {
+          // Refresh
+          this.constructMenu();
+        });
       });
     }
     // Get input files on Mac or Linux
     this.electronService.ipcRenderer?.on('file-open-system', (event, arg) => {
       if (arg) {
         setTimeout(() => {
-          this.fileSystemService.openFile(arg);
+          this.fileSystemService.openFile(arg, () => {
+            // Refresh
+            this.constructMenu();
+          });
         });
       }
     });
