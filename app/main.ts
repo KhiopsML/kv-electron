@@ -197,19 +197,20 @@ ipcMain.handle('launch-update-available', async () => {
   }
 });
 
-ipcMain.handle('launch-check-for-update', async () => {
-  try {
-    log.info('launch-check-for-update');
-    checkForUpdates();
-  } catch (error) {
-    console.log('error', error);
+ipcMain.handle(
+  'launch-check-for-update',
+  async (_event: any, channel: string) => {
+    try {
+      log.info('launch-check-for-update', channel);
+      checkForUpdates(channel);
+    } catch (error) {
+      console.log('error', error);
+    }
   }
-});
+);
 
-function checkForUpdates() {
-  const lsDatas = storage.get('KHIOPS_VISUALIZATION_');
-  const userChannel = lsDatas['CHANNEL'] || 'latest';
-  autoUpdater.allowPrerelease = userChannel === 'beta';
+function checkForUpdates(channel: string) {
+  autoUpdater.allowPrerelease = channel === 'beta';
   log.info('checkForUpdates');
   autoUpdater.checkForUpdates();
 }

@@ -144,16 +144,6 @@ export class AppComponent implements AfterViewInit {
 
     this.constructMenu();
 
-    (async () => {
-      try {
-        await this.electronService.ipcRenderer?.invoke(
-          'launch-check-for-update'
-        );
-      } catch (error) {
-        console.log('error', error);
-      }
-    })();
-
     // Get input file on windows
     const inputFile =
       this.electronService.ipcRenderer?.sendSync('get-input-file');
