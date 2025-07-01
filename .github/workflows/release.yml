@@ -20,6 +20,21 @@ jobs:
       - name: Check out Git repository
         uses: actions/checkout@v4
 
+      - name: Replace SSH with HTTPS in yarn.lock (Linux/macOS)
+        if: runner.os != 'Windows'
+        run: |
+          if [[ "$(uname)" == "Darwin" ]]; then
+            sed -i '' 's#git+ssh://git@github.com#https://github.com#g' yarn.lock
+          else
+            sed -i 's#git+ssh://git@github.com#https://github.com#g' yarn.lock
+          fi
+
+      - name: Replace SSH with HTTPS in yarn.lock (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          (Get-Content yarn.lock) -replace 'git\+ssh://git@github.com', 'https://github.com' | Set-Content yarn.lock
+
       - name: Install Node.js, NPM and Yarn
         uses: actions/setup-node@v4
         with:
