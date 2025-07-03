@@ -7,8 +7,9 @@ on:
   workflow_dispatch:
 # on: push
 
-KEYPAIR_PROD: KP_Khiops_HSM
-KEYPAIR_TEST: KP_Khiops_Test
+env:
+  KEYPAIR_PROD: KP_Khiops_HSM
+  KEYPAIR_TEST: KP_Khiops_Test
 
 jobs:
   release:
