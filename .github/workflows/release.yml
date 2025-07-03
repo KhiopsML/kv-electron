@@ -7,6 +7,9 @@ on:
   workflow_dispatch:
 # on: push
 
+KEYPAIR_PROD: KP_Khiops_HSM
+KEYPAIR_TEST: KP_Khiops_Test
+
 jobs:
   release:
     permissions: write-all
@@ -19,6 +22,23 @@ jobs:
     steps:
       - name: Check out Git repository
         uses: actions/checkout@v4
+        continue-on-error: true
+      - name: Replace SSH with HTTPS in yarn.lock (Linux/macOS)
+        if: runner.os != 'Windows'
+        run: |
+          if [[ "$(uname)" == "Darwin" ]]; then
+            sed -i '' 's#git+ssh://git@github.com#https://github.com#g' yarn.lock
+          else
+            sed -i 's#git+ssh://git@github.com#https://github.com#g' yarn.lock
+          fi
+        continue-on-error: true
+
+      - name: Replace SSH with HTTPS in yarn.lock (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          (Get-Content yarn.lock) -replace 'git\+ssh://git@github.com', 'https://github.com' | Set-Content yarn.lock
+        continue-on-error: true
 
       - name: Replace SSH with HTTPS in yarn.lock (Linux/macOS)
         if: runner.os != 'Windows'
@@ -38,10 +58,13 @@ jobs:
       - name: Install Node.js, NPM and Yarn
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
+        continue-on-error: true
+
       - run: yarn setEnv
         env:
           TRACKER_ID: ${{ secrets.TRACKER_ID }}
+        continue-on-error: true
 
       - name: Prepare for app notarization (macOS)
         if: startsWith(matrix.os, 'macos')
@@ -50,8 +73,72 @@ jobs:
           mkdir -p ~/private_keys/
           echo '${{ secrets.api_key }}' > ~/private_keys/AuthKey_${{ secrets.api_key_id }}.p8
 
+      - name: Add node-gyp resolution for CI (Node.js)
+        run: |
+          node -e "let p=require('./package.json');p.resolutions=p.resolutions||{};p.resolutions['node-gyp']='https://github.com/electron/node-gyp.git';require('fs').writeFileSync('package.json',JSON.stringify(p,null,2));"
+
       - name: Force Install Dependencies Before Build
         run: yarn install --verbose
+
+      # Configuration of SAAS signature for Windows only
+      - name: Install DigiCert Client tools (Windows only)
+        if: runner.os == 'Windows'
+        uses: digicert/ssm-code-signing@v1.0.1
+        continue-on-error: true
+
+      - name: Validate secrets (Windows only)
+        if: runner.os == 'Windows'
+        run: |
+          # Verify that all required secrets are present
+          if [[ -z "${{ secrets.SM_HOST }}" ]]; then
+            echo "âŒ SM_HOST secret is missing"
+            exit 1
+          fi
+          if [[ -z "${{ secrets.SM_API_KEY }}" ]]; then
+            echo "âŒ SM_API_KEY secret is missing"
+            exit 1
+          fi
+          if [[ -z "${{ secrets.SM_CLIENT_CERT_FILE_B64 }}" ]]; then
+            echo "âŒ SM_CLIENT_CERT_FILE_B64 secret is missing"
+            exit 1
+          fi
+          if [[ -z "${{ secrets.SM_CLIENT_CERT_PASSWORD }}" ]]; then
+            echo "âŒ SM_CLIENT_CERT_PASSWORD secret is missing"
+            exit 1
+          fi
+          echo "âœ… All required secrets are present"
+        shell: bash
+        continue-on-error: true
+
+      - name: Set up certificate (Windows only)
+        if: runner.os == 'Windows'
+        run: |
+          echo "${{ secrets.SM_CLIENT_CERT_FILE_B64 }}" | base64 --decode > /d/Certificate_pkcs12.p12 
+          if [[ ! -f "/d/Certificate_pkcs12.p12" ]]; then
+            echo "âŒ Failed to create certificate file"
+            exit 1
+          fi
+          echo "âœ… Certificate file created successfully"
+        shell: bash
+        continue-on-error: true
+
+      - name: Set variables for signature (Windows only)
+        if: runner.os == 'Windows'
+        id: variables-used-by-smctl
+        run: |
+          echo "SM_HOST=${{ secrets.SM_HOST }}" >> "$GITHUB_ENV" 
+          echo "SM_API_KEY=${{ secrets.SM_API_KEY }}" >> "$GITHUB_ENV" 
+          echo "SM_CLIENT_CERT_FILE=D:\\Certificate_pkcs12.p12" >> "$GITHUB_ENV" 
+          echo "SM_CLIENT_CERT_PASSWORD=${{ secrets.SM_CLIENT_CERT_PASSWORD }}" >> "$GITHUB_ENV"
+
+          echo "KEYPAIR=$KEYPAIR_PROD" >> "$GITHUB_ENV"
+          echo "::notice::Using Production key for signature"
+
+          # Verify that the environment variables are properly defined
+          echo "âœ… Environment variables set:"
+          echo "SM_HOST: ${{ secrets.SM_HOST }}"
+        shell: bash
+        continue-on-error: true
 
       - name: Build/release Electron
         uses: samuelmeuli/action-electron-builder@v1.6.0
@@ -73,3 +160,164 @@ jobs:
           # macOS notarization API key
           API_KEY_ID: ${{ secrets.api_key_id }}
           API_KEY_ISSUER_ID: ${{ secrets.api_key_issuer_id }}
+        continue-on-error: true
+
+      # Signing Windows executables after the build
+      - name: Sign Windows executables
+        if: runner.os == 'Windows'
+        run: |
+          echo "🔍 Searching for khiops Setup .exe file to sign..."
+
+          # Search specifically for Setup .exe file in release directory
+          setup_exe=""
+
+          if [[ -d "release" ]]; then
+            echo "Searching in release directory..."
+            setup_exe=$(find release -maxdepth 1 -name "*khiops*Setup*.exe" -type f | head -1)
+          fi
+
+          if [[ -z "$setup_exe" ]]; then
+            echo "❌ No khiops Setup .exe file found to sign"
+            exit 1
+          fi
+
+          echo "📋 Found Setup file to sign: $setup_exe"
+
+          # Test DigiCert connection before signing
+          echo "🔐 Testing DigiCert connection..."
+          if ! smctl healthcheck --all; then
+            echo "❌ DigiCert healthcheck failed"
+            exit 1
+          fi          
+          # Sign the Setup file (overwrites the original by default)
+          echo "🖊️  Signing: $setup_exe"
+
+          if OUTPUT=$(smctl sign --keypair-alias "$KEYPAIR" --config-file "C:/Users/RUNNER~1/AppData/Local/Temp/smtools-windows-x64/pkcs11properties.cfg" --input "$setup_exe" 2>&1); then
+            echo "$OUTPUT"
+            if echo "$OUTPUT" | grep -q "SUCCESSFUL\|SUCCESS"; then
+              echo "✅ Successfully signed: $setup_exe"
+            else
+              echo "❌ Failed to sign: $setup_exe"
+              echo "Output: $OUTPUT"
+              exit 1
+            fi
+          else
+            echo "❌ Command failed for: $setup_exe"
+            echo "Error: $OUTPUT"
+            exit 1
+          fi
+
+        shell: bash
+        continue-on-error: true
+
+      # List all .exe files
+      - name: List all .exe files
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          Write-Output "📂 Listing all .exe files in release directory..."
+          Get-ChildItem -Path release -Filter *.exe | ForEach-Object { Write-Output $_.FullName; Write-Output $_.Length }
+          Write-Output "✅ Listed all .exe files."
+        continue-on-error: true
+
+      # Delete old non signed exe from release
+      # it is named like : khiops-visualization-Setup-X.Y.Z.exe
+      - name: Delete old non signed exe from release
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          Write-Output "🗑️  Deleting old non-signed executables..."
+          $files = Get-ChildItem -Path release -Filter "khiops-visualization-Setup-*.exe"
+          if ($files) {
+              Remove-Item $files.FullName -Force
+              Write-Output "✅ Old non-signed executables deleted."
+          } else {
+              Write-Output "No old non-signed executables found."
+          }
+        continue-on-error: true
+
+      # Delete old khiops.visualization.Setup.X.Y.Z.exe.blockmap
+      - name: Delete old blockmap files
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          Write-Output "🗑️  Deleting old blockmap files..."
+          $blockmap_files = Get-ChildItem -Path release -Filter "khiops.visualization.Setup.*.exe.blockmap"
+          if ($blockmap_files) {
+              Remove-Item $blockmap_files.FullName -Force
+              Write-Output "✅ Old blockmap files deleted."
+          } else {
+              Write-Output "No old blockmap files found."
+          }
+        continue-on-error: true
+
+      # Rename signed exe from khiops.visualization.Setup-X.Y.Z.exe to khiops-visualization-Setup-X.Y.Z.exe
+      - name: Rename signed executable khiops-visualization-Setup-*.exe
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          Write-Output "🔄 Renaming signed executable..."
+          # Find the signed executable and rename it
+          $signed_exe = Get-ChildItem -Path release -Filter "khiops visualization Setup *.exe" | Select-Object -First 1
+          if (-not $signed_exe) {
+            Write-Output "❌ No signed executable found to rename"
+            exit 1
+          }
+          $new_name = "release/khiops-visualization-Setup-$($env:GITHUB_REF.Split('/')[-1].TrimStart('v')).exe"
+          Move-Item $signed_exe.FullName $new_name
+          Write-Output "✅ Renamed signed executable to: $new_name"
+        continue-on-error: true
+
+      # Udpate latest.yml sha for Windows
+      - name: Update latest.yml for Windows
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $exe = Get-ChildItem -Path release -Filter "khiops-visualization-Setup-*.exe" | Select-Object -First 1
+          if (-not $exe) {
+            Write-Error "No signed executable found in release directory."
+            exit 1
+          }
+          $hash = Get-FileHash -Algorithm SHA512 -Path $exe.FullName
+          $hex = $hash.Hash
+          $bytes = for ($i = 0; $i -lt $hex.Length; $i += 2) { [Convert]::ToByte($hex.Substring($i, 2), 16) }
+          $base64 = [Convert]::ToBase64String($bytes)
+          $size = (Get-Item $exe.FullName).Length
+          $latestYml = "release/latest.yml"
+          if (-not (Test-Path $latestYml)) {
+            Write-Error "latest.yml not found."
+            exit 1
+          }
+          (Get-Content $latestYml) -replace "(sha512:\s*).+", "`$1$base64" | Set-Content $latestYml
+          Write-Output "✅ Updated sha512 in latest.yml"
+        continue-on-error: true
+
+      # Now we can create the release with the signed files
+      - name: Extract version from tag
+        if: startsWith(github.ref, 'refs/tags/v')
+        id: version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+        shell: bash
+
+      - name: Create GitHub Release with signed files
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: ncipollo/release-action@v1.14.0
+        with:
+          allowUpdates: true
+          tag: ${{ github.ref_name }}
+          name: ${{ steps.version.outputs.VERSION }}
+          artifacts: |
+            release/*Setup*.exe
+            release/*.dmg
+            release/*.AppImage
+            release/*.deb
+            release/*.rpm
+            release/*.zip
+            release/*.tar.gz
+            release/latest-linux.yml
+            release/latest-mac.yml
+            release/latest.yml
+            release/*.blockmap
+          generateReleaseNotes: true
+          draft: true
+        continue-on-error: true

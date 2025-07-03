@@ -1,7 +1,6 @@
 // electron-reload.js
 const path = require("path");
 const fs = require("fs");
-const log = require("electron-log");
 
 module.exports = function setupReloading(mainWindow) {
   const libPath = path.resolve(
@@ -13,7 +12,6 @@ module.exports = function setupReloading(mainWindow) {
     console.error(`The library path does not exist: ${libPath}`);
     return;
   }
-  log.info("-------------------electron-reload-------------------");
 
   fs.watch(libPath, { recursive: true }, (eventType, filename) => {
     if (filename && filename.endsWith(".js")) {

@@ -2,7 +2,7 @@
 
 const fs = require("fs");
 const path = require("path");
-const electron_notarize = require("electron-notarize");
+const { notarize } = require("@electron/notarize");
 
 module.exports = async function (params) {
   console.log("----------------------------------", params);
@@ -27,9 +27,7 @@ module.exports = async function (params) {
   console.log(`Notarizing ${appId} found at ${appPath}`);
 
   try {
-    await electron_notarize.notarize({
-      tool: "notarytool",
-      appBundleId: appId,
+    await notarize({
       appPath: appPath,
       appleApiKeyId: process.env.API_KEY_ID,
       appleApiKey: "~/private_keys/AuthKey_" + process.env.API_KEY_ID + ".p8",
