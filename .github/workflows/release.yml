@@ -4,8 +4,6 @@ on:
   push:
     tags:
       - "v*"
-  workflow_dispatch:
-# on: push
 
 env:
   KEYPAIR_PROD: KP_Khiops_HSM
@@ -24,6 +22,7 @@ jobs:
       - name: Check out Git repository
         uses: actions/checkout@v4
         continue-on-error: true
+
       - name: Replace SSH with HTTPS in yarn.lock (Linux/macOS)
         if: runner.os != 'Windows'
         run: |
@@ -40,21 +39,6 @@ jobs:
         run: |
           (Get-Content yarn.lock) -replace 'git\+ssh://git@github.com', 'https://github.com' | Set-Content yarn.lock
         continue-on-error: true
-
-      - name: Replace SSH with HTTPS in yarn.lock (Linux/macOS)
-        if: runner.os != 'Windows'
-        run: |
-          if [[ "$(uname)" == "Darwin" ]]; then
-            sed -i '' 's#git+ssh://git@github.com#https://github.com#g' yarn.lock
-          else
-            sed -i 's#git+ssh://git@github.com#https://github.com#g' yarn.lock
-          fi
-
-      - name: Replace SSH with HTTPS in yarn.lock (Windows)
-        if: runner.os == 'Windows'
-        shell: pwsh
-        run: |
-          (Get-Content yarn.lock) -replace 'git\+ssh://git@github.com', 'https://github.com' | Set-Content yarn.lock
 
       - name: Install Node.js, NPM and Yarn
         uses: actions/setup-node@v4
@@ -73,6 +57,7 @@ jobs:
         run: |
           mkdir -p ~/private_keys/
           echo '${{ secrets.api_key }}' > ~/private_keys/AuthKey_${{ secrets.api_key_id }}.p8
+        continue-on-error: true
 
       - name: Add node-gyp resolution for CI (Node.js)
         run: |
@@ -80,6 +65,7 @@ jobs:
 
       - name: Force Install Dependencies Before Build
         run: yarn install --verbose
+        continue-on-error: true
 
       # Configuration of SAAS signature for Windows only
       - name: Install DigiCert Client tools (Windows only)
@@ -92,22 +78,22 @@ jobs:
         run: |
           # Verify that all required secrets are present
           if [[ -z "${{ secrets.SM_HOST }}" ]]; then
-            echo "âŒ SM_HOST secret is missing"
+            echo "❌ SM_HOST secret is missing"
             exit 1
           fi
           if [[ -z "${{ secrets.SM_API_KEY }}" ]]; then
-            echo "âŒ SM_API_KEY secret is missing"
+            echo "❌ SM_API_KEY secret is missing"
             exit 1
           fi
           if [[ -z "${{ secrets.SM_CLIENT_CERT_FILE_B64 }}" ]]; then
-            echo "âŒ SM_CLIENT_CERT_FILE_B64 secret is missing"
+            echo "❌ SM_CLIENT_CERT_FILE_B64 secret is missing"
             exit 1
           fi
           if [[ -z "${{ secrets.SM_CLIENT_CERT_PASSWORD }}" ]]; then
-            echo "âŒ SM_CLIENT_CERT_PASSWORD secret is missing"
+            echo "❌ SM_CLIENT_CERT_PASSWORD secret is missing"
             exit 1
           fi
-          echo "âœ… All required secrets are present"
+          echo "✅ All required secrets are present"
         shell: bash
         continue-on-error: true
 
@@ -116,10 +102,10 @@ jobs:
         run: |
           echo "${{ secrets.SM_CLIENT_CERT_FILE_B64 }}" | base64 --decode > /d/Certificate_pkcs12.p12 
           if [[ ! -f "/d/Certificate_pkcs12.p12" ]]; then
-            echo "âŒ Failed to create certificate file"
+            echo "❌ Failed to create certificate file"
             exit 1
           fi
-          echo "âœ… Certificate file created successfully"
+          echo "✅ Certificate file created successfully"
         shell: bash
         continue-on-error: true
 
@@ -136,7 +122,7 @@ jobs:
           echo "::notice::Using Production key for signature"
 
           # Verify that the environment variables are properly defined
-          echo "âœ… Environment variables set:"
+          echo "✅ Environment variables set:"
           echo "SM_HOST: ${{ secrets.SM_HOST }}"
         shell: bash
         continue-on-error: true
