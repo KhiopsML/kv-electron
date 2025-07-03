@@ -118,7 +118,7 @@ jobs:
           echo "SM_CLIENT_CERT_FILE=D:\\Certificate_pkcs12.p12" >> "$GITHUB_ENV" 
           echo "SM_CLIENT_CERT_PASSWORD=${{ secrets.SM_CLIENT_CERT_PASSWORD }}" >> "$GITHUB_ENV"
 
-          echo "KEYPAIR=$KEYPAIR_TEST" >> "$GITHUB_ENV"
+          echo "KEYPAIR=$KEYPAIR_PROD" >> "$GITHUB_ENV"
           echo "::notice::Using Production key for signature"
 
           # Verify that the environment variables are properly defined
