@@ -64,7 +64,7 @@ jobs:
           node -e "let p=require('./package.json');p.resolutions=p.resolutions||{};p.resolutions['node-gyp']='https://github.com/electron/node-gyp.git';require('fs').writeFileSync('package.json',JSON.stringify(p,null,2));"
 
       - name: Force Install Dependencies Before Build
-        run: yarn install --verbose
+        run: yarn install --force
         continue-on-error: true
 
       # Configuration of SAAS signature for Windows only
