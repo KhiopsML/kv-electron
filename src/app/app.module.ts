@@ -5,7 +5,12 @@
  */
 
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA, inject, provideAppInitializer } from '@angular/core';
+import {
+  NgModule,
+  CUSTOM_ELEMENTS_SCHEMA,
+  inject,
+  provideAppInitializer,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { CoreModule } from './core/core.module';
@@ -16,16 +21,15 @@ import {
   TranslateLoader,
   TranslateService,
 } from '@ngx-translate/core';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import {
+  provideTranslateHttpLoader,
+  TranslateHttpLoader,
+} from '@ngx-translate/http-loader';
 
 import { AppComponent } from './app.component';
 import { BigFileLoadingComponent } from './big-file-loading/big-file-loading.component';
 import { CommonModule } from '@angular/common';
 import { MatomoModule } from 'ngx-matomo-client';
-
-// AoT requires an exported function for factories
-const httpLoaderFactory = (http: HttpClient): TranslateHttpLoader =>
-  new TranslateHttpLoader(http, './assets/i18n/', '.json');
 
 export function setupTranslateFactory(service: TranslateService) {
   const serv = () => service.use('en');
@@ -41,11 +45,10 @@ export function setupTranslateFactory(service: TranslateService) {
     HttpClientModule,
     CoreModule,
     TranslateModule.forRoot({
-      loader: {
-        provide: TranslateLoader,
-        useFactory: httpLoaderFactory,
-        deps: [HttpClient],
-      },
+      loader: provideTranslateHttpLoader({
+        prefix: './assets/i18n/',
+        suffix: '.json',
+      }),
     }),
     MatomoModule.forRoot({
       mode: 'deferred', // defer loading to set unique visitorId
@@ -54,9 +57,9 @@ export function setupTranslateFactory(service: TranslateService) {
   providers: [
     TranslateService,
     provideAppInitializer(() => {
-        const initializerFn = (setupTranslateFactory)(inject(TranslateService));
-        return initializerFn();
-      }),
+      const initializerFn = setupTranslateFactory(inject(TranslateService));
+      return initializerFn();
+    }),
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   bootstrap: [AppComponent],
