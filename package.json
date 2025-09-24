@@ -109,7 +109,7 @@
     "@types/jasminewd2": "2.0.13",
     "@typescript-eslint/eslint-plugin": "8.44.1",
     "@typescript-eslint/parser": "8.44.1",
-    "electron": "37.5.1",
+    "electron": "38.1.2",
     "electron-builder": "25.1.8",
     "electron-builder-notarize": "1.5.2",
     "electron-debug": "4.1.0",

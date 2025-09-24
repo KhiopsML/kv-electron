@@ -6134,10 +6134,10 @@ electron-updater@6.6.8:
     semver "^7.6.3"
     tiny-typed-emitter "^2.1.0"
 
-electron@37.5.1:
-  version "37.5.1"
-  resolved "https://registry.yarnpkg.com/electron/-/electron-37.5.1.tgz#2f2758f57948f63d853a8c905c55ad8d9cd84ae7"
-  integrity sha512-RqN3dl6I5yhmynkUc3pUzM6qFCvANau3VGRX9xQEh7FYdwmkqVxKXYM5enrE9LW7j7PzHomQQn6+J2xaF7BHsQ==
+electron@38.1.2:
+  version "38.1.2"
+  resolved "https://registry.yarnpkg.com/electron/-/electron-38.1.2.tgz#3509999a1b635fb92e99a8e5eaf239110a9a7734"
+  integrity sha512-WXUcN3W8h8NTTZViA3KNX0rV2YBU0X0mEUM3ubupXTDY4QtIN7tmiqYVOKSKpR2LckTmBWGuEeY4D6xVoffwKQ==
   dependencies:
     "@electron/get" "^2.0.0"
     "@types/node" "^22.7.7"
