@@ -18,7 +18,7 @@ jobs:
           node-version: 20
       - name: Install dependencies
         run: |
-          yarn install --frozen-lockfile || npm ci
+          yarn install --force
       - name: Start Electron app
         run: |
           yarn start &
