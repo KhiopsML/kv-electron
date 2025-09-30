@@ -1,0 +1,33 @@
+name: E2E Test Electron UI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  cypress-run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install dependencies
+        run: |
+          yarn install --frozen-lockfile || npm ci
+      - name: Start Electron app
+        run: |
+          yarn start &
+          sleep 20
+        env:
+          CI: true
+      - name: Run Cypress tests
+        uses: cypress-io/github-action@v6
+        with:
+          wait-on: 'http://localhost:4200'
+          wait-on-timeout: 60
+          config-file: cypress.config.js
