@@ -9,30 +9,63 @@ on:
 jobs:
   cypress-run:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 22
+
+      # Cache pour node_modules racine
+      - name: Cache root node_modules
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-root-${{ hashFiles('yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-node-root-
+
+      # Cache pour node_modules de app/
+      - name: Cache app node_modules
+        uses: actions/cache@v4
+        with:
+          path: app/node_modules
+          key: ${{ runner.os }}-node-app-${{ hashFiles('app/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-node-app-
+
       - name: Install dependencies
         run: |
-          yarn install --force
-      - name: Install dependencies
-        run: |
-          cd app/
-          yarn install --force
-          cd ..
-      - name: Start Electron app
-        run: |
-          yarn start &
-          sleep 20
-        env:
-          CI: true
-      - name: Run Cypress tests
+          echo "Installing root dependencies..."
+          yarn install --frozen-lockfile
+          echo "Installing app dependencies..."
+          cd app && yarn install --frozen-lockfile && cd ..
+
+      - name: Cypress run
         uses: cypress-io/github-action@v6
         with:
+          build: yarn build
+          start: yarn start
           wait-on: "http://localhost:4200"
-          wait-on-timeout: 60
+          wait-on-timeout: 120
           config-file: cypress.config.js
+          install: false
+        env:
+          CI: true
+
+      - name: Upload screenshots
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: cypress-screenshots
+          path: cypress/screenshots
+
+      - name: Upload videos
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cypress-videos
+          path: cypress/videos
