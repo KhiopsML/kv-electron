@@ -12,28 +12,34 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 22
+
       - name: Install dependencies
         run: |
           yarn install --force
+
       - name: Install app dependencies
         run: |
           cd app/
           yarn install --force
           cd ..
+
       - name: Start Electron app
         run: |
           xvfb-run -a yarn start &
-          sleep 30
+          npx wait-on http://localhost:4200
         env:
           CI: true
           ELECTRON_DISABLE_SANDBOX: 1
+          DBUS_SESSION_BUS_ADDRESS: /dev/null
+
       - name: Run Cypress tests
         uses: cypress-io/github-action@v6
         with:
           wait-on: "http://localhost:4200"
-          wait-on-timeout: 60
+          wait-on-timeout: 120
           config-file: cypress.config.js
