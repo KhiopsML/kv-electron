@@ -26,8 +26,8 @@ jobs:
           cd ..
       - name: Start Electron app
         run: |
-          yarn start &
-          sleep 20
+          xvfb-run -a yarn start &
+          sleep 30
         env:
           CI: true
           ELECTRON_DISABLE_SANDBOX: 1
