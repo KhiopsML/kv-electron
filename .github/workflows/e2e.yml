@@ -2,9 +2,9 @@ name: E2E Test Electron UI
 
 on:
   push:
-    branches: [ master ]
+    branches: [master]
   pull_request:
-    branches: [ master ]
+    branches: [master]
 
 jobs:
   cypress-run:
@@ -19,6 +19,10 @@ jobs:
       - name: Install dependencies
         run: |
           yarn install --force
+      - name: Install dependencies
+        run: |
+          cd app/
+          yarn install --force
       - name: Start Electron app
         run: |
           yarn start &
@@ -28,6 +32,6 @@ jobs:
       - name: Run Cypress tests
         uses: cypress-io/github-action@v6
         with:
-          wait-on: 'http://localhost:4200'
+          wait-on: "http://localhost:4200"
           wait-on-timeout: 60
           config-file: cypress.config.js
