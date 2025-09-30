@@ -23,6 +23,7 @@ jobs:
         run: |
           cd app/
           yarn install --force
+          cd ..
       - name: Start Electron app
         run: |
           yarn start &
