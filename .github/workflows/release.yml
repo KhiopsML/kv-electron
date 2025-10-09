@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - "v*"
+  workflow_dispatch:
 
 env:
   KEYPAIR_PROD: KP_Khiops_HSM
@@ -256,7 +257,7 @@ jobs:
           $new_exe_name = "release/khiops-visualization-Setup-$version.exe"
           Move-Item $signed_exe.FullName $new_exe_name
           Write-Output "✅ Renamed signed executable to: $new_exe_name"
-          
+
           # Find and rename the corresponding blockmap file
           $blockmap_file = Get-ChildItem -Path release -Filter "khiops visualization Setup *.exe.blockmap" | Select-Object -First 1
           if ($blockmap_file) {
