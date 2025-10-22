@@ -165,43 +165,6 @@ export class MenuService {
           type: 'separator',
         },
         {
-          label: this.translate.instant('GLOBAL_MENU_CHANNELS'),
-          submenu: [
-            {
-              label: this.translate.instant('GLOBAL_MENU_LATEST'),
-              type: 'radio',
-              click: () => {
-                if (this.currentChannel !== 'latest') {
-                  this.setChannel('latest');
-                }
-              },
-              checked: this.currentChannel === 'latest',
-            },
-            {
-              label: this.translate.instant('GLOBAL_MENU_BETA'),
-              type: 'radio',
-              click: () => {
-                if (this.currentChannel !== 'beta') {
-                  this.configService.openChannelDialog((e: string) => {
-                    if (e === 'confirm') {
-                      // User confirm
-                      this.setChannel('beta');
-                    } else if (e === 'cancel') {
-                      this.setChannel('latest');
-                      // re construct the menu to set channel to latest
-                      refreshCb && refreshCb();
-                    }
-                  });
-                }
-              },
-              checked: this.currentChannel === 'beta',
-            },
-          ],
-        },
-        {
-          type: 'separator',
-        },
-        {
           label: this.translate.instant('GLOBAL_MENU_REPORT_A_BUG'),
           click: () => {
             const emailId = 'bug.khiopsvisualization@orange.com';
@@ -263,18 +226,63 @@ export class MenuService {
     menuTemplate.push(menu1);
     menuTemplate.push(menu3);
     menuTemplate.push(menu2);
-    if (btnUpdate) {
-      const menu5 = {
-        label: btnUpdateText,
-        click: () => {
-          if (btnUpdate === 'update-available' && !this.updateInProgress) {
-            updateCb && updateCb();
-          }
+    const menuUpdate = {
+      label: btnUpdate
+        ? btnUpdateText
+        : this.translate.instant('GLOBAL_MENU_UPDATE'),
+      submenu: [
+        {
+          label:
+            btnUpdate === 'update-available'
+              ? this.translate.instant('GLOBAL_UPDATE_CLICK_TO_UPDATE')
+              : btnUpdateText,
+          click: () => {
+            if (btnUpdate === 'update-available' && !this.updateInProgress) {
+              updateCb && updateCb();
+            }
+          },
         },
-      };
+        {
+          type: 'separator',
+        },
+        {
+          label: this.translate.instant('GLOBAL_MENU_CHANNELS'),
+          submenu: [
+            {
+              label: this.translate.instant('GLOBAL_MENU_LATEST'),
+              type: 'radio',
+              click: () => {
+                if (this.currentChannel !== 'latest') {
+                  this.setChannel('latest');
+                }
+              },
+              checked: this.currentChannel === 'latest',
+            },
+            {
+              label: this.translate.instant('GLOBAL_MENU_BETA'),
+              type: 'radio',
+              click: () => {
+                if (this.currentChannel !== 'beta') {
+                  this.configService.openChannelDialog((e: string) => {
+                    if (e === 'confirm') {
+                      // User confirm
+                      this.setChannel('beta');
+                    } else if (e === 'cancel') {
+                      this.setChannel('latest');
+                      // re construct the menu to set channel to latest
+                      refreshCb && refreshCb();
+                    }
+                  });
+                }
+              },
+              checked: this.currentChannel === 'beta',
+            },
+          ],
+        },
+      ],
+    };
 
-      menuTemplate.push(menu5);
-    }
+    menuTemplate.push(menuUpdate);
 
     return menuTemplate;
   }

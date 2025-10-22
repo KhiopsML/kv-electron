@@ -209,6 +209,7 @@ ipcMain.handle(
 function checkForUpdates(channel: string) {
   autoUpdater.allowPrerelease = channel === 'beta';
   log.info('checkForUpdates');
+  // autoUpdater.forceDevUpdateConfig = true;
   autoUpdater.checkForUpdates();
 }
 

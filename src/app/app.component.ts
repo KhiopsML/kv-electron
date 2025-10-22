@@ -34,7 +34,8 @@ export class AppComponent implements AfterViewInit {
   visualizationComponent?: ElementRef<HTMLElement>;
 
   config: any;
-  btnUpdateText?: string;
+  btnUpdateText: string =
+    '✅ ' + this.translate.instant('GLOBAL_UPDATE_UP_TO_DATE');
   btnUpdate?: string;
 
   constructor(
