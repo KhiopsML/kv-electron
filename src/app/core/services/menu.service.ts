@@ -52,7 +52,7 @@ export class MenuService {
   ) {
     const opendFiles = this.fileSystemService.getFileHistory();
 
-    const menu1 = {
+    const menuFile = {
       label: this.translate.instant('GLOBAL_MENU_FILE'),
       submenu: [
         {
@@ -99,14 +99,14 @@ export class MenuService {
       ],
     };
 
-    menu1.submenu[3].accelerator = 'CommandOrControl+W';
+    menuFile.submenu[3].accelerator = 'CommandOrControl+W';
 
     // insert history files
     if (opendFiles.files.length > 0) {
       // in reverse order
       for (let i = opendFiles.files.length - 1; i >= 0; i--) {
         if (typeof opendFiles.files[i] === 'string') {
-          menu1.submenu.splice(2, 0, {
+          menuFile.submenu.splice(2, 0, {
             label: this.fileSystemService.getFileHistory().files[i],
             click: () => {
               this.openFile(
@@ -119,7 +119,7 @@ export class MenuService {
       }
     }
 
-    const menu2 = {
+    const menuHelp = {
       label: this.translate.instant('GLOBAL_MENU_HELP'),
       submenu: [
         {
@@ -198,7 +198,7 @@ export class MenuService {
       ],
     };
 
-    const menu3 = {
+    const menuView = {
       label: this.translate.instant('GLOBAL_MENU_VIEW'),
       submenu: [
         {
@@ -223,9 +223,9 @@ export class MenuService {
     };
 
     const menuTemplate = [];
-    menuTemplate.push(menu1);
-    menuTemplate.push(menu3);
-    menuTemplate.push(menu2);
+    menuTemplate.push(menuFile);
+    menuTemplate.push(menuView);
+    menuTemplate.push(menuHelp);
     const menuUpdate = {
       label: btnUpdate
         ? btnUpdateText
