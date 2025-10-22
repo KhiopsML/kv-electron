@@ -198,6 +198,40 @@ export class MenuService {
             },
           ],
         },
+        {
+          type: 'separator',
+        },
+        {
+          label: this.translate.instant('GLOBAL_MENU_REPORT_A_BUG'),
+          click: () => {
+            const emailId = 'bug.khiopsvisualization@orange.com';
+            const subject =
+              LibVersionService.getAppTitle() +
+              ': ' +
+              this.translate.instant('GLOBAL_MENU_REPORT_A_BUG');
+            const message =
+              '\n\n--------------------------------------------------\n' +
+              this.translate.instant('GLOBAL_MENU_VERSION') +
+              ': ' +
+              LibVersionService.getAppVersion() +
+              '\n' +
+              this.translate.instant('GLOBAL_MENU_LIB_VERSION') +
+              ': ' +
+              LibVersionService.getLibVersion() +
+              '\n';
+
+            this.electronService.shell.openExternal(
+              'mailto:' +
+                emailId +
+                '?subject=' +
+                subject +
+                '&body=' +
+                encodeURIComponent(message),
+              // @ts-ignore
+              '_self'
+            );
+          },
+        },
       ],
     };
 
@@ -225,44 +259,10 @@ export class MenuService {
       ],
     };
 
-    const menu4 = {
-      label: this.translate.instant('GLOBAL_MENU_REPORT_A_BUG'),
-
-      click: () => {
-        const emailId = 'bug.khiopsvisualization@orange.com';
-        const subject =
-          LibVersionService.getAppTitle() +
-          ': ' +
-          this.translate.instant('GLOBAL_MENU_REPORT_A_BUG');
-        const message =
-          '\n\n--------------------------------------------------\n' +
-          this.translate.instant('GLOBAL_MENU_VERSION') +
-          ': ' +
-          LibVersionService.getAppVersion() +
-          '\n' +
-          this.translate.instant('GLOBAL_MENU_LIB_VERSION') +
-          ': ' +
-          LibVersionService.getLibVersion() +
-          '\n';
-
-        this.electronService.shell.openExternal(
-          'mailto:' +
-            emailId +
-            '?subject=' +
-            subject +
-            '&body=' +
-            encodeURIComponent(message),
-          // @ts-ignore
-          '_self'
-        );
-      },
-    };
-
     const menuTemplate = [];
     menuTemplate.push(menu1);
     menuTemplate.push(menu3);
     menuTemplate.push(menu2);
-    menuTemplate.push(menu4);
     if (btnUpdate) {
       const menu5 = {
         label: btnUpdateText,
