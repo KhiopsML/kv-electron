@@ -8662,10 +8662,10 @@ keyv@^4.0.0, keyv@^4.5.4:
   dependencies:
     json-buffer "3.0.1"
 
-khiops-visualization@11.10.3:
-  version "11.10.3"
-  resolved "https://registry.yarnpkg.com/khiops-visualization/-/khiops-visualization-11.10.3.tgz#c4694723e451ba7b6f6f3be63b8b5237079ae23e"
-  integrity sha512-q9QMIoyV2u6uZMS7o8p7vt5fA2CIYoJ+RQ2yPnmFHFHUJqDfHY2Z3W/XDLHQS12bhsqLRLS9kG4deouGIBKpnw==
+khiops-visualization@11.10.5:
+  version "11.10.5"
+  resolved "https://registry.yarnpkg.com/khiops-visualization/-/khiops-visualization-11.10.5.tgz#c730f43d32b34dcd93fd202d5228e5acc4bcf762"
+  integrity sha512-4LBAlPmsn2UiKFDvSEFeIDdhNIqdUamasPy2/JdSbmvXktnTMHEBFwznoX5bQKIN6sJHnCcqPiCYepIVHDFgZA==
 
 kind-of@^6.0.2:
   version "6.0.3"
