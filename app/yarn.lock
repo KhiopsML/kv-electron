@@ -32,10 +32,10 @@ brace-expansion@^1.1.7:
     balanced-match "^1.0.0"
     concat-map "0.0.1"
 
-builder-util-runtime@9.4.0:
-  version "9.4.0"
-  resolved "https://registry.npmjs.org/builder-util-runtime/-/builder-util-runtime-9.4.0.tgz"
-  integrity sha512-omkpaKbutPYqC0nwLEeGq540xND1YPhfVzwT6CFyCFzxhNDt/X+fykr17Yo3jxiuwI3zaAnY/1tKFoRN+FeHhg==
+builder-util-runtime@9.5.0:
+  version "9.5.0"
+  resolved "https://registry.yarnpkg.com/builder-util-runtime/-/builder-util-runtime-9.5.0.tgz#0074d170608cee67a48578141b32d217b824f942"
+  integrity sha512-7qmRMH8X/IzDM+1TysKNFo5cNWBbfacdLX4EqkuE5aiRTECAlYiKHSqEc6cc3c4Lrmpgk0utbxOPkj0iYaWAWQ==
   dependencies:
     debug "^4.3.4"
     sax "^1.2.4"
@@ -97,18 +97,18 @@ electron-log@5.4.3:
   resolved "https://registry.npmjs.org/electron-log/-/electron-log-5.4.3.tgz"
   integrity sha512-sOUsM3LjZdugatazSQ/XTyNcw8dfvH1SYhXWiJyfYodAAKOZdHs0txPiLDXFzOZbhXgAgshQkshH2ccq0feyLQ==
 
-electron-updater@6.6.8:
-  version "6.6.8"
-  resolved "https://registry.npmjs.org/electron-updater/-/electron-updater-6.6.8.tgz"
-  integrity sha512-n8FeXRc7Q7BBweS85+H5h4/uzBz8hSSOYhDnwOumpbIhYdPk9EEzWLKDyoArMyf4RebywqWBUE96QDn9TETRhQ==
+electron-updater@6.7.0:
+  version "6.7.0"
+  resolved "https://registry.yarnpkg.com/electron-updater/-/electron-updater-6.7.0.tgz#8dd471de27193a5192bda322c66cdbff0add4123"
+  integrity sha512-j8ejBZCkp5kvv1MxJNoQaSjNvEbr/ZHSeQdwm0jbZGgVm+Z6ExqRpqE8oRxDsDacxQfk7l8hlBAnlq4qAk2wfw==
   dependencies:
-    builder-util-runtime "9.4.0"
+    builder-util-runtime "9.5.0"
     fs-extra "^10.1.0"
     js-yaml "^4.1.0"
     lazy-val "^1.0.5"
     lodash.escaperegexp "^4.1.2"
     lodash.isequal "^4.5.0"
-    semver "^7.6.3"
+    semver "7.7.2"
     tiny-typed-emitter "^2.1.0"
 
 fs-extra@^10.1.0:
@@ -266,10 +266,10 @@ sax@^1.2.4:
   resolved "https://registry.npmjs.org/sax/-/sax-1.4.1.tgz"
   integrity sha512-+aWOz7yVScEGoKNd4PA10LZ8sk0A/z5+nXQG5giUO5rprX9jgYsTdov9qCchZiPIZezbZH+jRut8nPodFAX4Jg==
 
-semver@^7.6.3:
-  version "7.6.3"
-  resolved "https://registry.npmjs.org/semver/-/semver-7.6.3.tgz"
-  integrity sha512-oVekP1cKtI+CTDvHWYFUcMtsK/00wmAEfyqKfNdARm8u1wNVhSgaX7A8d4UuIlUI5e84iEwOhs7ZPYRmzU9U6A==
+semver@7.7.2:
+  version "7.7.2"
+  resolved "https://registry.yarnpkg.com/semver/-/semver-7.7.2.tgz#67d99fdcd35cec21e6f8b87a7fd515a33f982b58"
+  integrity sha512-RF0Fw+rO5AMf9MAyaRXI4AV0Ulj5lMHqVxxdSgiVbixSCXoEmmX/jk0CuJw4+3SqroYO9VoUh+HcuJivvtJemA==
 
 signal-exit@^3.0.2:
   version "3.0.7"
