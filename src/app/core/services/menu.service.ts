@@ -26,7 +26,7 @@ export class MenuService {
     private fileSystemService: FileSystemService,
     private storageService: StorageService
   ) {
-    this.currentChannel = this.storageService.getOne('CHANNEL');
+    this.currentChannel = this.storageService.getOne('CHANNEL') || 'latest';
 
     (async () => {
       try {
