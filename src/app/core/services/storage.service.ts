@@ -15,7 +15,19 @@ export class StorageService {
   private _storageKey: string = 'KHIOPS_VISUALIZATION_';
 
   constructor(private electronService: ElectronService) {
-    this.electronService.storage?.setDataPath(this.electronService.os.tmpdir());
+    try {
+      // Use userData directory instead of temp directory to persist data across updates
+      // This ensures that settings, cookies consent, channel, history... are preserved during OTA updates
+      const userDataPath = this.electronService.remote.app.getPath('userData');
+      this.electronService.storage?.setDataPath(userDataPath);
+      console.log('Storage path set to:', userDataPath);
+    } catch (error) {
+      console.error(
+        'Failed to set persistent storage path, falling back to default:',
+        error
+      );
+      // If userData path fails, electron-json-storage will use its default location
+    }
     this.getAll();
   }
 
