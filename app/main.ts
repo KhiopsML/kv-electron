@@ -270,7 +270,9 @@ autoUpdater.on(
     dialog.showMessageBox(win, dialogOpts).then(function (res) {
       log.info('showMessageBox', res);
       if (res.response === 0) {
-        autoUpdater.quitAndInstall();
+        // isSilent: true → no confirmation message
+        // isForceRunAfter: true → automatic restart
+        autoUpdater.quitAndInstall(true, true);
       }
     });
   }
