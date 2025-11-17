@@ -35,15 +35,15 @@ export class TrackerService {
               },
             ],
           };
-          // Disable cookies to prevent coookie errors in production
+          // Configure cookieless tracking without consent prompts
           this.matomoTracker.disableCookies();
-          this.matomoTracker.setDoNotTrack(true);
 
-          // Set unique visitorId
+          // Set unique visitorId based on machine ID (anonymous)
           this.matomoTracker.setVisitorId(machineId);
 
-          this.matomoTracker.requireConsent();
+          // Enable cookieless tracking - this disables cookies but allows tracking
           this.matomoTracker.requireCookieConsent();
+
           this.matomoTracker.trackPageView();
 
           // Important to enable file tracking for production mode file://
