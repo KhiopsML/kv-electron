@@ -2,7 +2,7 @@
   "name": "khiops-visualization",
   "title": "khiops Visualization",
   "main": "app/main.js",
-  "version": "11.3.0",
+  "version": "11.3.1",
   "license": "BSD-3-Clause-Clear",
   "author": {
     "name": "Orange",
@@ -82,9 +82,9 @@
     "dotenv": "17.2.3",
     "electron-json-storage": "4.6.0",
     "electron-log": "5.4.3",
-    "electron-updater": "6.7.0",
+    "electron-updater": "6.7.1",
     "event-stream": "4.0.1",
-    "khiops-visualization": "11.10.6",
+    "khiops-visualization": "11.10.7",
     "ngx-matomo-client": "8.0.0",
     "postcss-loader": "8.2.0",
     "rxjs": "7.8.2",
@@ -107,12 +107,12 @@
     "@ngx-translate/http-loader": "17.0.0",
     "@types/jasmine": "5.1.13",
     "@types/jasminewd2": "2.0.13",
-    "@typescript-eslint/eslint-plugin": "8.46.4",
-    "@typescript-eslint/parser": "8.46.4",
+    "@typescript-eslint/eslint-plugin": "8.47.0",
+    "@typescript-eslint/parser": "8.47.0",
     "cypress": "15.6.0",
     "cypress-shadow-dom": "1.4.1",
     "electron": "39.2.1",
-    "electron-builder": "26.1.0",
+    "electron-builder": "26.2.0",
     "electron-builder-notarize": "1.5.2",
     "electron-debug": "4.1.0",
     "electron-reload": "2.0.0-alpha.1",
@@ -139,7 +139,9 @@
     "brace-expansion": "4.0.1",
     "http-proxy-middleware": "3.0.5",
     "vite": "6.4.1",
-    "on-headers": "1.1.0"
+    "on-headers": "1.1.0",
+    "glob": "11.1.0",
+    "js-yaml": "4.1.1"
   },
   "browserslist": [
     "chrome 110"
