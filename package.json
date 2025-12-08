@@ -19,16 +19,16 @@
   "homepage": "https://github.com/KhiopsML/kv-electron#readme",
   "browser": {
     "child_process": false,
+    "crypto": false,
     "electron": false,
+    "fs": false,
     "http": false,
     "https": false,
     "net": false,
+    "os": false,
     "path": false,
-    "crypto": false,
     "stream": false,
-    "tls": false,
-    "fs": false,
-    "os": false
+    "tls": false
   },
   "scripts": {
     "postinstall": "electron-builder install-app-deps",
@@ -99,9 +99,9 @@
     "@angular-eslint/eslint-plugin-template": "20.6.0",
     "@angular-eslint/schematics": "20.6.0",
     "@angular-eslint/template-parser": "20.6.0",
-    "@angular/build": "20.3.10",
-    "@angular/cli": "20.3.10",
-    "@angular/compiler-cli": "20.3.12",
+    "@angular/build": "20.3.12",
+    "@angular/cli": "20.3.13",
+    "@angular/compiler-cli": "20.3.15",
     "@electron/notarize": "3.1.1",
     "@ngx-translate/core": "17.0.0",
     "@ngx-translate/http-loader": "17.0.0",
