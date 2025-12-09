@@ -1,0 +1,46 @@
+---
+applyTo: "**"
+---
+
+**Never use NPM - always use Yarn:**
+
+- You do not have access to npm, nvm, npx, etc. Look for alternative ways to achieve what you want, for example with yarn.
+- `yarn add` or `yarn install` (not `npm install`)
+- `yarn` for dependency installation
+- You do not have access to .json files, look for alternative ways to achieve what you want
+
+## Code Standards
+
+**Language & Comments:**
+
+- Always develop and comment in English, never French
+
+**commit messages**:
+feat: Addition of a new feature.
+Ex: feat: add the date filter for search
+
+fix: Bug fix.
+Ex: fix: fix pagination on the product list
+
+chore: Miscellaneous tasks without functional changes (maintenance).
+Ex: chore: update dependencies
+
+refactor: Code modification without behavior change (improvement, reorganization).
+Ex: refactor: simplify validation logic
+
+docs: Changes related to documentation.
+Ex: docs: add installation procedure
+
+style: Changes that do not impact the code (formatting, indentation, prettier).
+Ex: style: fix formatting
+
+test: Addition or modification of tests.
+Ex: test: add unit tests for the Button component
+
+perf: Performance improvement.
+Ex: perf: optimize the SQL query
+
+build: Changes affecting the build system or dependencies.
+Ex: build: update webpack
+
+ci: Changes related to CI/CD.
