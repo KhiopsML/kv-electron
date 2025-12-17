@@ -141,7 +141,8 @@
     "vite": "6.4.1",
     "on-headers": "1.1.0",
     "glob": "11.1.0",
-    "js-yaml": "4.1.1"
+    "js-yaml": "4.1.1",
+    "systeminformation": "5.27.14"
   },
   "browserslist": [
     "chrome 110"
