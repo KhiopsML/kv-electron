@@ -2,7 +2,7 @@
   "name": "khiops-visualization",
   "title": "khiops Visualization",
   "main": "app/main.js",
-  "version": "11.4.0",
+  "version": "11.4.0a",
   "license": "BSD-3-Clause-Clear",
   "author": {
     "name": "Orange",
