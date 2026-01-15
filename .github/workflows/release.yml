@@ -306,7 +306,7 @@ jobs:
         shell: bash
 
       - name: Create GitHub Release with signed files
-        if: startsWith(github.ref, 'refs/tags/v')
+        if: startsWith(github.ref, 'refs/tags/v') && runner.os == 'Windows'
         uses: ncipollo/release-action@v1.14.0
         with:
           allowUpdates: true
