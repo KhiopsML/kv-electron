@@ -2,7 +2,7 @@
   "name": "khiops-visualization",
   "title": "khiops Visualization",
   "main": "app/main.js",
-  "version": "11.4.0",
+  "version": "11.4.0a",
   "license": "BSD-3-Clause-Clear",
   "author": {
     "name": "Orange",
@@ -68,8 +68,8 @@
   },
   "dependencies": {
     "@angular/common": "20.3.15",
-    "@angular/compiler": "20.3.15",
-    "@angular/core": "20.3.15",
+    "@angular/compiler": "20.3.16",
+    "@angular/core": "20.3.16",
     "@angular/forms": "20.3.15",
     "@angular/language-service": "20.3.15",
     "@angular/platform-browser": "20.3.15",
