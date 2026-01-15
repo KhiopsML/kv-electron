@@ -21,7 +21,7 @@ jobs:
           - os: macos-latest
           - os: ubuntu-latest
             arch: x64
-          - os: ubuntu-22.04-arm64
+          - os: ubuntu-24.04-arm
             arch: arm64
           - os: windows-latest
     steps:
