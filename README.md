@@ -1,3 +1,12 @@
+# ⚠️ Archived repository
+
+This project was merged into:
+[https://github.com/KhiopsML/khiops-visualization-desktop](https://github.com/KhiopsML/khiops-visualization-desktop)
+
+**This repository is no longer maintained.**
+
+<hr>
+
 # Khiops Visualization Electron
 
 ![Build Releases](https://github.com/KhiopsML/kv-electron/actions/workflows/release.yml/badge.svg) ![Test Workflow](https://github.com/KhiopsML/khiops-visualization/actions/workflows/test.yml/badge.svg) [![Latest Stable Version](https://img.shields.io/github/v/release/KhiopsML/kv-electron?label=Latest%20stable%20version)](https://github.com/KhiopsML/kv-electron/releases) [![End-to-end tests](https://github.com/KhiopsML/khiops-visualization/actions/workflows/e2e.yml/badge.svg)](https://github.com/KhiopsML/khiops-visualization/actions/workflows/e2e.yml) ![gitleaks badge](https://img.shields.io/badge/protected%20by-gitleaks-blue)
